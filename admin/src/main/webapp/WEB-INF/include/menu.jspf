@@ -1,0 +1,205 @@
+<%@ page pageEncoding="utf-8"%>
+<nav id="column-left">
+	<div id="profile">
+		<div>
+			<h4>관리자 시스템</h4>
+		</div>
+	</div>
+	<ul id="menu">
+		<li id="menu-dashboard"><a href="/"><i class="fa fa-dashboard fw"></i> <span>Dashboard</span></a></li>
+		<li id="menu-sale"><a href="/orders.dr"><i class="fa fa-shopping-cart fw"></i> <span>Sales Orders</span></a></li>
+		<!-- <li id="menu-sale">
+		    <a class="parent">
+		        <i class="fa fa-shopping-cart fw"></i> <span>Sales</span>
+		    </a>
+			<ul>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=sale/order&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Orders</a></li>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=sale/recurring&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Recurring Profiles</a></li>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=sale/return&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Returns</a></li>
+				<li>
+				    <a class="parent">Gift Vouchers</a>
+					<ul>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=sale/voucher&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Gift Vouchers</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=sale/voucher_theme&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Voucher Themes</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li> -->
+		<li id="menu-customer"><a href="/customers.dr"><i class="fa fa-user fw"></i> <span>Customers</span></a></li>
+		<li id="menu-customer-group"><a href="/customers/groups.dr"><i class="fa fa-users fw"></i> <span>Customer Groups</span></a></li>
+		<li id="menu-catalog"><a href="/catalog.dr"><i class="fa fa-tags fw"></i> <span>Catalog</span></a></li>
+		<li id="menu-catalog">
+		    <a class="parent"><i class="fa fa-tags fw"></i> <span>Products</span></a>
+			<ul>
+				<li><a href="/products/product.dr">Products</a></li>
+				<li><a href="/products/reference.dr">Reference Products</a></li>
+				<li><a href="/products/manufacturer.dr">Manufacturers</a></li>
+			</ul>
+		</li>
+		<li id="menu-contents">
+		    <a class="parent">
+		        <i class="fa fa-puzzle-piece fw"></i> <span>Contents</span>
+		    </a>
+			<ul>
+			    <li><a href="/contents/information.dr">Information</a></li>
+				<li><a href="/contents/notice.dr">공지사항</a></li>
+				<li><a href="/contents/books.dr">My Books</a></li>
+				<li><a href="/contents/security/health.dr">건강정보</a></li>
+				<li><a href="/contents/security/disease.dr">질병과 추천생약제</a></li>
+				<li><a href="/contents/security/clinic.dr">임상사례</a></li>
+			</ul>
+		</li>
+<!-- 		<li id="menu-design">
+		    <a class="parent">
+		        <i class="fa fa-television fw"></i> <span>Design</span>
+		    </a>
+			<ul>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=design/layout&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Layouts</a></li>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=design/banner&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Banners</a></li>
+			</ul>
+	    </li> -->
+	    
+		<li id="menu-marketing">
+		    <a class="parent">
+		        <i class="fa fa-share-alt fw"></i> <span>Marketing</span>
+		    </a>
+			<ul>
+				<!-- <li><a href="https://drpurenatural.com/admin/index.php?route=marketing/marketing&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Marketing</a></li>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=marketing/affiliate&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Affiliates</a></li>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=marketing/coupon&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Coupons</a></li> -->
+				<li><a href="/marketing/templates.dr">Templates</a></li>
+				<li><a href="/marketing/newsletter.dr">Newsletter</a></li>
+			</ul>
+		</li>
+		<li id="menu-system">
+		    <a class="parent">
+		        <i class="fa fa-cog fw"></i> <span>System</span>
+		    </a>
+			<ul>
+				<li><a href="https://drpurenatural.com/admin/index.php?route=setting/store&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Settings</a></li>
+				<!-- <li><a class="parent">Users</a>
+					<ul>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=user/user&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Users</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=user/user_permission&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">User Groups</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=user/api&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">API</a></li>
+					</ul>
+				</li> -->
+				<li>
+				    <a class="parent">Localisation</a>
+					<ul>
+						<!-- <li><a href="https://drpurenatural.com/admin/index.php?route=localisation/location&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Store Location</a></li> -->
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/language&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Languages</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/currency&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Currencies</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/stock_status&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Stock Statuses</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/order_status&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Order Statuses</a></li>
+						<!-- <li>
+						    <a class="parent">Returns</a>
+							<ul>
+								<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/return_status&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Return Statuses</a></li>
+								<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/return_action&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Return Actions</a></li>
+								<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/return_reason&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Return Reasons</a></li>
+							</ul>
+					    </li> -->
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/country&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Countries</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/zone&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Zones</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/geo_zone&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Geo Zones</a></li>
+						<li><a class="parent">Taxes</a>
+							<ul>
+								<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/tax_class&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Tax Classes</a></li>
+								<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/tax_rate&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Tax Rates</a></li>
+							</ul>
+						</li>
+						<!-- <li><a href="https://drpurenatural.com/admin/index.php?route=localisation/length_class&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Length Classes</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=localisation/weight_class&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Weight Classes</a></li> -->
+					</ul>
+				</li>
+				<li>
+				    <a class="parent">Tools</a>
+					<ul>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=tool/upload&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Uploads</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=tool/backup&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Backup / Restore</a></li>
+						<li><a href="https://drpurenatural.com/admin/index.php?route=tool/log&amp;token=BHSGF4FqqYNnHPwP9o66pTvVrGpuGtyb">Error Logs</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li id="menu-report">
+		    <a class="parent">
+		        <i class="fa fa-bar-chart-o fw"></i> <span>Reports</span>
+		    </a>
+			<ul>
+				<li>
+				    <a class="parent">Sales</a>
+					<ul>
+						<li><a href="/report/sales/order.dr">Orders</a></li>
+						<li><a href="/report/sales/tax.dr">Tax</a></li>
+						<li><a href="/report/sales/shipping.dr">Shipping</a></li>
+						<!-- <li><a href="/report/sales/returns.dr">Returns</a></li>
+						<li><a href="/report/sales/coupons.dr">Coupons</a></li> -->
+					</ul>
+				</li>
+				<li>
+				    <a class="parent">Products</a>
+					<ul>
+						<li><a href="/report/products/viewed.dr">Viewed</a></li>
+						<li><a href="/report/products/purchased.dr">Purchased</a></li>
+					</ul>
+				</li>
+				<li>
+				    <a class="parent">Customers</a>
+					<ul>
+						<!-- <li><a href="/report/customers/online.dr">Customers Online</a></li>
+						<li><a href="/report/customers/activity.dr">Customer Activity</a></li>
+						<li><a href="/report/customers/search.dr">Customer Searches</a></li> -->
+						<li><a href="/report/customers/order.dr">Orders</a></li>
+						<li><a href="/report/customers/reward.dr">Reward Points</a></li>
+						<!-- <li><a href="/report/customers/credit.dr">Credit</a></li> -->
+						<li><a href="/report/customers/donator.dr">Donator</a></li>
+					</ul>
+				</li>
+				<!-- <li>
+				    <a class="parent">Marketing</a>
+					<ul>
+						<li><a href="/report/marketing.dr">Marketing</a></li>
+						<li><a href="/report/affiliate.dr">Affiliates</a></li>
+						<li><a href="/report/affiliate/activity.dr">Affiliate Activity</a></li>
+					</ul>
+				</li> -->
+			</ul>
+		</li>
+	</ul>
+	<!-- <div id="stats">
+		<ul>
+			<li>
+				<div>
+					Orders Completed <span class="pull-right">89%</span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style="width: 89%">
+						<span class="sr-only">89%</span>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div>
+					Orders Processing <span class="pull-right">91%</span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" style="width: 91%">
+						<span class="sr-only">91%</span>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div>
+					Other Statuses <span class="pull-right">9%</span>
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100" style="width: 9%">
+						<span class="sr-only">9%</span>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div> -->
+</nav>

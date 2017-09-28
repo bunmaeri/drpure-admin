@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ 
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+ 
+    <description>CustomTag functions library</description>
+    <display-name>CustomTag functions</display-name>
+    <tlib-version>1.1</tlib-version>
+    <short-name>ctag</short-name>
+    <uri>tlds/CustomTag.tld</uri>
+ 
+    <function>
+        <description>Base Url</description>
+        <name>getBaseUrl</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getBaseUrl()</function-signature>
+        <example>
+        ${ctag:getBaseUrl()}
+        </example>
+    </function>
+    
+    <function>
+        <description>Language</description>
+        <name>getLanguage</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getLanguage()</function-signature>
+        <example>
+        ${ctag:getLanguage()}
+        </example>
+    </function>
+    
+    <function>
+        <description>Success 메세지</description>
+        <name>getSuccess</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getSuccess(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getSuccess(message)}
+        </example>
+    </function>
+    
+    <function>
+        <description>Error 메세지</description>
+        <name>getError</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getError(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getError(error)}
+        </example>
+    </function>
+    
+    <function>
+        <description>ErrorList 메세지</description>
+        <name>getErrorList</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getErrorList(java.util.List)</function-signature>
+        <example>
+        ${ctag:getErrorList(list)}
+        </example>
+    </function>
+    
+    <function>
+        <description>금액표시</description>
+        <name>getCurrency</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getCurrency(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getCurrency(currency)}
+        </example>
+    </function>
+    
+    <function>
+        <description>숫자표시</description>
+        <name>getNumber</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getNumber(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getNumber(number)}
+        </example>
+    </function>
+    
+    <function>
+        <description>주문상태명</description>
+        <name>getOrderStatusName</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getOrderStatusName(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getOrderStatusName(order_status_id)}
+        </example>
+    </function>
+    
+    <function>
+        <description>Yes Or No</description>
+        <name>getYesOrNo</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getYesOrNo(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getYesOrNo(yes_or_no)}
+        </example>
+    </function>
+    
+    <function>
+        <description>활성/비활성</description>
+        <name>getActive</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getActive(java.lang.String)</function-signature>
+        <example>
+        ${ctag:getActive(active)}
+        </example>
+    </function>
+    
+    <function>
+        <description>선택된 메뉴 활성 시키기</description>
+        <name>getActiveMenu</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getActiveMenu(java.lang.String, java.lang.String)</function-signature>
+        <example>
+        ${ctag:getActiveMenu(reqUrl, clickUrl)}
+        </example>
+    </function>
+    
+    <function>
+        <description>선택된 메뉴 활성 시키기(URL이 포함됐는지)</description>
+        <name>getContainsActiveMenu</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getContainsActiveMenu(java.lang.String, java.lang.String)</function-signature>
+        <example>
+        ${ctag:getgetContainsActiveMenu(reqUrl, clickUrl)}
+        </example>
+    </function>
+    
+    <function>
+        <description>선택된 메뉴 활성 시키기(하위메뉴가 있을 때)</description>
+        <name>getActiveOpenMenu</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getActiveOpenMenu(java.lang.String, java.lang.String)</function-signature>
+        <example>
+        ${ctag:getActiveOpenMenu(reqUrl, clickUrl)}
+        </example>
+    </function>
+</taglib>

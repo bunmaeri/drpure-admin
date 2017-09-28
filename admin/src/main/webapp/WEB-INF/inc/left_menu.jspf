@@ -1,0 +1,357 @@
+<%@ page pageEncoding="utf-8"%>
+<!-- BEGIN SIDEBAR -->
+<div class="page-sidebar-wrapper">
+    <div class="page-sidebar navbar-collapse collapse">
+	    <!-- BEGIN SIDEBAR MENU -->
+	    <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+	        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+	        <li class="sidebar-toggler-wrapper hide">
+	            <div class="sidebar-toggler">
+	                <span></span>
+	            </div>
+	        </li>
+	        <!-- END SIDEBAR TOGGLER BUTTON -->
+	        <li class="sidebar-search-wrapper">
+	            <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+	            <form class="sidebar-search  " action="page_general_search_3.html" method="POST">
+	                <a href="javascript:;" class="remove">
+	                    <i class="icon-close"></i>
+	                </a>
+	                <div class="input-group">
+	                    <input type="text" class="form-control" placeholder="제품명, model">
+	                    <span class="input-group-btn">
+	                        <a href="javascript:;" class="btn submit">
+	                            <i class="icon-magnifier"></i>
+	                        </a>
+	                    </span>
+	                </div>
+	            </form>
+	            <!-- END RESPONSIVE QUICK SEARCH FORM -->
+	        </li>
+	        <li class="nav-item start  ${ctag:getActiveMenu(sessionScope.URL, '/index.dr')}">
+	            <a href="/index.dr" class="nav-toggle">
+	                <i class="icon-home"></i>
+	                <span class="title">Dashboard</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/sales/orders.dr')}  ${ctag:getContainsActiveMenu(sessionScope.URL, '/sales/order/view/')}">
+	            <a href="/sales/orders.dr" class="nav-toggle">
+	                <i class="icon-basket"></i>
+	                <span class="title">주문</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/customers.dr')}  ${ctag:getContainsActiveMenu(sessionScope.URL, '/customer/view')}">
+	            <a href="/customers.dr" class="nav-toggle">
+	                <i class="icon-user"></i>
+	                <span class="title">고객</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/customers_groups.dr')}  ${ctag:getContainsActiveMenu(sessionScope.URL, '/customers_groups')}">
+	            <a href="/customers_groups.dr" class="nav-toggle">
+	                <i class="icon-users"></i>
+	                <span class="title">고객 그룹</span>
+	            </a>
+	        </li>
+	        <li class="heading">
+                <h3 class="uppercase">DR. PURE NATURAL</h3>
+            </li>
+	        <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/categories.dr')}  ${ctag:getContainsActiveMenu(sessionScope.URL, '/category/view/')}">
+	            <a href="/categories.dr" class="nav-toggle">
+	                <i class="icon-layers"></i>
+	                <span class="title">제품 카테고리</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/products.dr')}  ${ctag:getContainsActiveMenu(sessionScope.URL, '/product/view/')}">
+	            <a href="/products.dr" class="nav-toggle">
+	                <i class="fa fa-pinterest-p"></i>
+	                <span class="title">제품 목록</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/products')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-diamond"></i>
+	                <span class="title">기타 제품 메뉴</span>
+	                <span class="arrow"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/products/reference.dr')}">
+	                    <a href="/products/reference.dr" class="nav-link ">
+	                        <span class="title">참조된 제품 찾기</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/products/manufacturer.dr')}">
+	                    <a href="/products/manufacturer.dr" class="nav-link ">
+	                        <span class="title">제조사 관리</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/contents')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-puzzle"></i>
+	                <span class="title">컨텐츠 관리</span>
+	                <span class="arrow"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/information.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/information/')}">
+	                    <a href="/contents/information.dr" class="nav-link ">
+	                        <span class="title">유용 정보</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/notice.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/notice/info')}">
+	                    <a href="/contents/notice.dr" class="nav-link ">
+	                        <span class="title">메인페이지 공지사항</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/security/health.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/security/health/contents')}">
+	                    <a href="/contents/security/health.dr" class="nav-link ">
+	                        <span class="title">건강정보</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/security/disease.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/security/disease')}">
+	                    <a href="/contents/security/disease.dr" class="nav-link ">
+	                        <span class="title">질병과 추천생약제</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/security/clinic.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/security/clinic')}">
+	                    <a href="/contents/security/clinic.dr" class="nav-link ">
+	                        <span class="title">임상사례</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/books.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/book/')}">
+	                    <a href="/contents/books.dr" class="nav-link ">
+	                        <span class="title">책</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/etc.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/etc/info')}">
+	                    <a href="/contents/etc.dr" class="nav-link ">
+	                        <span class="title">기타 컨텐츠</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/marketing')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-feed"></i>
+	                <span class="title">이메일 마케팅</span>
+	                <span class="arrow"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/marketing/templates.dr')}">
+	                    <a href="/marketing/templates.dr" class="nav-link ">
+	                        <span class="title">템플릿 관리</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/marketing/newsletter.dr')}">
+	                    <a href="/marketing/newsletter.dr" class="nav-link ">
+	                        <span class="title">이메일 보내기</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/reports')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-briefcase"></i>
+	                <span class="title">레포트</span>
+	                <span class="arrow"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/sales/order.dr')}">
+	                    <a href="/reports/sales/order.dr" class="nav-link ">
+	                        <span class="title">Sales Orders</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/sales/tax.dr')}">
+	                    <a href="/reports/sales/tax.dr" class="nav-link ">
+	                        <span class="title">Sales Tax</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/sales/shipping.dr')}">
+	                    <a href="/reports/sales/shipping.dr" class="nav-link ">
+	                        <span class="title">Sales Shipping</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/products/viewed.dr')}">
+	                    <a href="/reports/products/viewed.dr" class="nav-link ">
+	                        <span class="title">Products Viewed</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/products/purchased.dr')}">
+	                    <a href="/reports/products/purchased.dr" class="nav-link ">
+	                        <span class="title">Products Purchased</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/customers/order.dr')}">
+	                    <a href="/reports/customers/order.dr" class="nav-link ">
+	                        <span class="title">Customers Orders</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/customers/reward.dr')}">
+	                    <a href="/reports/customers/reward.dr" class="nav-link ">
+	                        <span class="title">Customers Reward Points</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/reports/customers/donator.dr')}">
+	                    <a href="/reports/customers/donator.dr" class="nav-link ">
+	                        <span class="title">Customers Donator</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/settings')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-settings"></i>
+	                <span class="title">Settings</span>
+	                <span class="arrow"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/settings/languages.dr')}">
+	                    <a href="/settings/languages.dr" class="nav-link ">
+	                        <span class="title">Languages</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/settings/order/status.dr')}">
+	                    <a href="/settings/order/status.dr" class="nav-link ">
+	                        <span class="title">Order Status</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/settings/tax/rates.dr')}">
+	                    <a href="/settings/tax/rates.dr" class="nav-link ">
+	                        <span class="title">Tax Rates</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        
+	        <!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
+	        <!-- My Home Doc -->
+	        <!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
+	        <%-- 
+	        <li class="heading">
+                <h3 class="uppercase" style="color:#000;font-weight:600;">MY HOME DOC</h3>
+            </li>
+            <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_categories.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_category/view/')}">
+	            <a href="/my_categories.dr" class="nav-toggle">
+	                <i class="icon-layers black"></i>
+	                <span class="title black">제품 카테고리</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_products.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_product/view/')}">
+	            <a href="/my_products.dr" class="nav-toggle">
+	                <i class="fa fa-pinterest-p black"></i>
+	                <span class="title black">제품 목록</span>
+	            </a>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/my_products')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-diamond black"></i>
+	                <span class="title black">기타 제품 메뉴</span>
+	                <span class="arrow black"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_products/reference.dr')}">
+	                    <a href="/my_products/reference.dr" class="nav-link ">
+	                        <span class="title black">참조된 제품 찾기</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/my_contents')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-puzzle black"></i>
+	                <span class="title black">컨텐츠 관리</span>
+	                <span class="arrow black"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/information.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/information/info')}">
+	                    <a href="/my_contents/information.dr" class="nav-link ">
+	                        <span class="title black">유용 정보</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/notice.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/notice/info')}">
+	                    <a href="/my_contents/notice.dr" class="nav-link ">
+	                        <span class="title black">메인페이지 공지사항</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/security/health.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/security/health/contents')}">
+	                    <a href="/my_contents/security/health.dr" class="nav-link ">
+	                        <span class="title black">건강정보</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/security/disease.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/security/disease')}">
+	                    <a href="/my_contents/security/disease.dr" class="nav-link ">
+	                        <span class="title black">질병과 추천생약제</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/security/clinic.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/security/clinic')}">
+	                    <a href="/my_contents/security/clinic.dr" class="nav-link ">
+	                        <span class="title black">임상사례</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/books.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/book/')}">
+	                    <a href="/my_contents/books.dr" class="nav-link ">
+	                        <span class="title black">책</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_contents/etc.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/my_contents/etc/info')}">
+	                    <a href="/my_contents/etc.dr" class="nav-link ">
+	                        <span class="title black">기타 컨텐츠</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li>
+	        <li class="nav-item ${ctag:getActiveOpenMenu(sessionScope.NAV, '/my_reports')}">
+	            <a href="javascript:;" class="nav-link nav-toggle">
+	                <i class="icon-briefcase black"></i>
+	                <span class="title black">레포트</span>
+	                <span class="arrow black"></span>
+	            </a>
+	            <ul class="sub-menu">
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/sales/order.dr')}">
+	                    <a href="/my_reports/sales/order.dr" class="nav-link ">
+	                        <span class="title black">Sales Orders</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/sales/tax.dr')}">
+	                    <a href="/my_reports/sales/tax.dr" class="nav-link ">
+	                        <span class="title black">Sales Tax</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/sales/shipping.dr')}">
+	                    <a href="/my_reports/sales/shipping.dr" class="nav-link ">
+	                        <span class="title black">Sales Shipping</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/products/viewed.dr')}">
+	                    <a href="/my_reports/products/viewed.dr" class="nav-link ">
+	                        <span class="title black">Products Viewed</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/products/purchased.dr')}">
+	                    <a href="/my_reports/products/purchased.dr" class="nav-link ">
+	                        <span class="title black">Products Purchased</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/customers/order.dr')}">
+	                    <a href="/my_reports/customers/order.dr" class="nav-link ">
+	                        <span class="title black">Customers Orders</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/customers/reward.dr')}">
+	                    <a href="/my_reports/customers/reward.dr" class="nav-link ">
+	                        <span class="title black">Customers Reward Points</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/my_reports/customers/donator.dr')}">
+	                    <a href="/my_reports/customers/donator.dr" class="nav-link ">
+	                        <span class="title black">Customers Donator</span>
+	                    </a>
+	                </li>
+	            </ul>
+	        </li> --%>
+	    </ul>
+	    <!-- END SIDEBAR MENU -->
+	</div>
+	<!-- END SIDEBAR -->
+</div>
+<!-- END SIDEBAR -->

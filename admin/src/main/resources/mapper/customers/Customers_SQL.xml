@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="customers">
+	<select id="totalCustomers" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_customer WHERE 1=1
+      <if test="customer_name!=null and customer_name!=''">
+           AND customer_name LIKE CONCAT('%',#{customer_name},'%')
+      </if>
+      <if test="email!=null and email!=''">
+           AND email LIKE CONCAT('%',#{email},'%')
+      </if>
+      <if test="customer_group_id!=null and customer_group_id!=''">
+           AND customer_group_id = #{customer_group_id}
+      </if>
+      <if test="status!=null and status!=''">
+           AND status = #{status}
+      </if>
+      <if test="myhomedoc!=null and myhomedoc!=''">
+           AND myhomedoc = #{myhomedoc}
+      </if>
+      <if test="join_path_id!=null and join_path_id!=''">
+           AND join_path_id = #{join_path_id}
+      </if>
+      <if test="date_added!=null and date_added!=''">
+           AND DATE(date_added) = #{date_added}
+      </if>
+    </select>
+    
+    <select id="listCustomers" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+      <![CDATA[
+        SELECT c.*, cgd.name AS customer_group, a.requisition_id, a.country_id,
+               IFNULL((SELECT s.name FROM dr_country s WHERE s.country_id=a.country_id),'') AS country_name,
+               IFNULL((SELECT cjp.join_path_name FROM dr_customer_join_path cjp WHERE cjp.join_path_id=c.join_path_id),'') AS join_path_name,
+               DATE_FORMAT(c.date_added, '%Y-%m-%d') AS join_date
+          FROM dr_customer c 
+               LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+               LEFT JOIN dr_address a ON (c.address_id = a.address_id)
+         WHERE cgd.language_id = #{language_id}
+      ]]>
+      <if test="customer_name!=null and customer_name!=''">
+           AND c.customer_name LIKE CONCAT('%',#{customer_name},'%')
+      </if>
+      <if test="email!=null and email!=''">
+           AND c.email LIKE CONCAT('%',#{email},'%')
+      </if>
+      <if test="customer_group_id!=null and customer_group_id!=''">
+           AND c.customer_group_id = #{customer_group_id}
+      </if>
+      <if test="status!=null and status!=''">
+           AND c.status = #{status}
+      </if>
+      <if test="myhomedoc!=null and myhomedoc!=''">
+           AND c.myhomedoc = #{myhomedoc}
+      </if>
+      <if test="join_path_id!=null and join_path_id!=''">
+           AND c.join_path_id = #{join_path_id}
+      </if>
+      <if test="date_added!=null and date_added!=''">
+           AND DATE(c.date_added) = #{date_added}
+      </if>
+         ORDER BY DATE(c.date_added) desc, c.customer_name
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="addressList" parameterType="String" resultType="hashmap">
+        SELECT a.address_id,
+               a.customer_id,
+               a.address_alias,
+               a.customer_name,
+               a.firstname,
+               a.lastname,
+               a.company,
+               a.address_1,
+               a.address_2,
+               a.city,
+               a.postcode,
+               a.telephone,
+               a.country_id,
+               a.zone_id,
+               a.requisition_id,
+               c.name AS country_name,
+               c.iso_code_2,
+               c.iso_code_3,
+               z.name AS zone_name,
+               z.code
+          FROM dr_address a
+               LEFT JOIN dr_country c ON (a.country_id=c.country_id)
+               LEFT OUTER JOIN dr_zone z ON (a.zone_id=z.zone_id)
+         WHERE customer_id = #{value}
+         ORDER BY address_id ASC
+    </select>
+    
+    <select id="address" parameterType="String" resultType="hashmap">
+        SELECT a.address_id,
+               a.customer_id,
+               a.address_alias,
+               a.customer_name,
+               a.firstname,
+               a.lastname,
+               a.company,
+               a.address_1,
+               a.address_2,
+               a.city,
+               a.postcode,
+               a.telephone,
+               a.country_id,
+               a.zone_id,
+               a.requisition_id,
+               c.name AS country_name,
+               c.iso_code_2,
+               c.iso_code_3,
+               z.name AS zone_name,
+               z.code
+          FROM dr_address a
+               LEFT JOIN dr_country c ON (a.country_id=c.country_id)
+               LEFT OUTER JOIN dr_zone z ON (a.zone_id=z.zone_id)
+         WHERE a.address_id = #{value}
+    </select>
+    
+    <update id="updatePasswordByUserid" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_customer 
+               SET password = #{password}
+             WHERE customer_id = #{customer_id}
+        ]]>
+    </update>
+    
+    <select id="customerInfo" parameterType="String" resultType="hashmap">
+        SELECT c.*,
+              (SELECT jp.join_path_name FROM dr_customer_join_path jp WHERE jp.join_path_id=c.join_path_id) AS join_path_name,
+               cs.new_string1 AS login_password,
+               DATE_FORMAT(cs.date_added, "%Y-%m-%d %T") AS login_date
+          FROM dr_customer c
+               LEFT OUTER JOIN (SELECT s.string_id, s.new_string1, s.date_added FROM dr_customer_string s WHERE s.string_id = #{value} ORDER BY string_no DESC LIMIT 0,1) cs ON(cs.string_id=c.customer_id)
+         WHERE c.customer_id = #{value}
+    </select>
+    
+    <update id="updateCustomerInfo" parameterType="hashmap">
+        UPDATE dr_customer 
+           SET customer_group_id = #{customer_group_id},
+               customer_name = #{customer_name},
+               firstname = #{firstname},
+               lastname = #{lastname},
+               email = #{email},
+               telephone = #{telephone},
+             <if test="password!=null and password!=''">
+               password = #{password},
+             </if>
+               address_id = #{address_id},
+               shipping_address_id = #{shipping_address_id},
+               status = #{status},
+               myhomedoc = #{myhomedoc}
+         WHERE customer_id = #{customer_id}
+    </update>
+    
+    <select id="duplicateEmail" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM dr_customer WHERE email = #{value}
+    </select>
+    
+    <select id="totalCustomerReward" parameterType="String" resultType="hashmap">
+        SELECT COUNT(*) AS total,
+               IFNULL(SUM(points),0) AS sum_points
+          FROM dr_customer_reward
+         WHERE customer_id=#{value}
+    </select>
+    
+    <select id="listCustomerReward" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT cr.*,
+               DATE_FORMAT(cr.date_added, '%Y-%m-%d') AS create_date
+          FROM dr_customer_reward cr 
+         WHERE cr.customer_id = #{customer_id}
+         ORDER BY DATE(cr.date_added) DESC 
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <insert id="addCustomerReward" parameterType="hashmap">
+        INSERT INTO dr_customer_reward(customer_id, order_id, description, points, date_added)
+        VALUES
+        (
+          #{customer_id},
+          #{order_id},
+          #{description},
+          #{points},
+          NOW()
+         )
+    </insert>
+    
+    <delete id="deleteCustomerReward" parameterType="String">
+        <![CDATA[
+            DELETE FROM dr_customer_reward 
+             WHERE customer_reward_id = #{value}
+        ]]>
+    </delete>
+    
+    <select id="totalCustomerLoginhistory" parameterType="String" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_customer_login
+         WHERE customer_id=#{value}
+    </select>
+    
+    <select id="listCustomerLoginhistory" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT cr.*,
+               DATE_FORMAT(cr.date_added, '%Y-%m-%d') AS login_date
+          FROM dr_customer_login cr 
+         WHERE cr.customer_id = #{customer_id}
+         ORDER BY DATE(cr.date_added) DESC 
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <update id="updateCustomerAddress" parameterType="hashmap">
+        UPDATE dr_address 
+           SET address_alias = #{address_alias},
+               customer_name = #{customer_name},
+               firstname = #{firstname},
+               lastname = #{lastname},
+               company = #{company},
+               address_1 = #{address_1},
+               address_2 = #{address_2},
+               city = #{city},
+               postcode = #{postcode},
+               telephone = #{telephone},
+               country_id = #{country_id},
+               zone_id = #{zone_id},
+               requisition_id = #{requisition_id}
+         WHERE address_id = #{address_id}
+    </update>
+    
+    <insert id="addAddress" parameterType="hashmap" useGeneratedKeys="true" keyProperty="address_id">
+        <![CDATA[
+            INSERT INTO dr_address (customer_id, address_alias, customer_name, firstname, lastname, company, address_1, address_2, city, postcode, telephone, country_id, zone_id, requisition_id)
+            VALUES
+            (
+                #{customer_id}, 
+                #{address_alias},
+                #{customer_name},
+                #{firstname}, 
+                #{lastname},
+                #{company},
+                #{address_1}, 
+                #{address_2},
+                #{city},
+                #{postcode}, 
+                #{telephone},
+                #{country_id},
+                #{zone_id},
+                #{requisition_id}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateCustomerInfoAddress" parameterType="hashmap">
+        UPDATE dr_customer 
+           SET safe=0
+             <if test="address_id!=null and address_id!=''">
+               ,address_id = #{address_id}
+             </if>
+             <if test="shipping_address_id!=null and shipping_address_id!=''">
+               ,shipping_address_id = #{shipping_address_id}
+             </if>
+         WHERE customer_id = #{customer_id}
+    </update>
+    
+    <delete id="deleteCustomerAddress" parameterType="String">
+        <![CDATA[
+            DELETE FROM dr_address 
+             WHERE address_id = #{value}
+        ]]>
+    </delete>
+    
+    <select id="customerGroup" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_customer_group_description
+         WHERE customer_group_id = #{customer_group_id}
+           AND language_id = #{language_id}
+    </select>
+    
+    <update id="updateCustomerGroup" parameterType="hashmap">
+        UPDATE dr_customer_group_description 
+           SET name = #{name},
+               reward = #{reward},
+               description = #{description}
+         WHERE customer_group_id = #{customer_group_id}
+           AND language_id = #{language_id}
+    </update>
+    
+    <insert id="addCustomerGroup" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_customer_group_description (customer_group_id, language_id, name, reward, description)
+            SELECT MAX(customer_group_id)+1,
+                   #{language_id}, 
+                   #{name},
+                   #{reward},
+                   #{description}
+              FROM dr_customer_group_description
+        ]]>
+    </insert>
+</mapper>

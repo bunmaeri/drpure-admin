@@ -1,0 +1,28 @@
+
+body {color:#000;font-size:13px;  min-height: 100%;width: 100%;}
+
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {border:none;}
+
+.table thead > tr > td, 
+.table tbody > tr > td {vertical-align:top;font-size:14px;}
+
+.order-list > thead > tr > td {border-bottom:1px solid #000;font-size:14px;}
+
+.table > tbody > tr.row-total > td {padding:3px 8px;font-size:14px;}
+
+.table > tbody > tr > td.address-box {
+	padding:0 8px;
+	width:33%;
+	vertical-align: bottom;
+    font-size:14px;
+}
+
+.table > tbody > tr.spacer td {height:5px;font-size:14px;}
+
+#report_print_head > tr > td, 
+#report_print_body > tr > td{border: 1px solid #ddd;}

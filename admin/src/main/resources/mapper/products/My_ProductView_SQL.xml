@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_productView">
+	<select id="productInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT p.*,
+               pd.name
+          FROM dr_product p, dr_product_description pd
+         WHERE p.product_id = pd.product_id
+           AND pd.product_id = #{product_id}
+           AND pd.language_id = #{language_id}
+    </select>
+    
+    <select id="productMeta" parameterType="hashmap" resultType="hashmap">
+        SELECT pd.product_id,
+               pd.language_id,
+               pd.name,
+               pd.description,
+               pd.tag,
+               pd.meta_title,
+               pd.meta_description,
+               pd.meta_keyword
+          FROM my_product_description pd
+         WHERE pd.product_id = #{product_id}
+           AND pd.language_id = #{language_id}
+    </select>
+    
+    <update id="updateProductMeta" parameterType="hashmap">
+        <![CDATA[
+            UPDATE my_product_description 
+               SET name = #{name},
+                   description = #{description},
+                   tag = #{tag},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword}
+             WHERE product_id = #{product_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <insert id="addProductMeta" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO my_product_description(product_id, language_id, name, description, tag, meta_title, meta_description, meta_keyword)
+            VALUES
+            (
+                #{product_id},
+                #{language_id},
+                #{name},
+                #{description},
+                #{tag},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword}
+            )
+        ]]>
+    </insert>
+    
+    <insert id="newProductMeta" parameterType="hashmap" useGeneratedKeys="true" keyProperty="product_id">
+        <![CDATA[
+            INSERT INTO my_product_description(product_id, language_id, name, description, tag, meta_title, meta_description, meta_keyword)
+            VALUES
+            (      #{product_id},
+                   #{language_id},
+                   #{name},
+                   #{description},
+                   #{tag},
+                   #{meta_title},
+                   #{meta_description},
+                   #{meta_keyword}
+             )
+        ]]>
+    </insert>
+    
+    <select id="maxModel" resultType="int">
+        SELECT MAX(model) + 1 AS model
+          FROM product_quantity
+    </select>
+    
+    <insert id="newProduct" parameterType="hashmap" useGeneratedKeys="true" keyProperty="product_id">
+        INSERT INTO my_product(model, stock_status_id, shipping, date_available, length, width, height, length_class_id, subtract, sort_order, viewed, date_added, date_modified)
+        VALUES
+            (  #{model},
+               #{stock_status_id},
+               #{shipping},
+               DATE_FORMAT(now(), '%Y-%m-%d'),
+               #{length},
+               #{width},
+               #{height},
+               #{length_class_id},
+               #{subtract},
+               #{sort_order},
+               #{viewed},
+               now(),
+               now()
+            )
+    </insert>
+    
+    <insert id="newProductQuantity" parameterType="hashmap">
+        INSERT INTO product_quantity(model, quantity, date_added, date_modified)
+        VALUES
+            (
+                #{model},
+                #{quantity},
+                now(),
+                now()
+            )
+    </insert>
+    
+    <select id="product" parameterType="hashmap" resultType="hashmap">
+        SELECT p.*,
+              (SELECT q.quantity FROM product_quantity q WHERE q.model=p.model) AS quantity
+          FROM my_product p
+         WHERE p.product_id = #{product_id}
+    </select>
+    
+    <update id="updateProduct" parameterType="hashmap">
+        UPDATE my_product 
+           SET model = #{model},
+               sku = #{sku},
+               upc = #{upc},
+               ean = #{ean},
+               jan = #{jan},
+               icebox = #{icebox},
+               mpn = #{mpn},
+               location = #{location},
+               manufacturer_id = #{manufacturer_id},
+               price = #{price},
+               tax_class_id = #{tax_class_id},
+               date_available = #{date_available},
+               weight = #{weight},
+               weight_class_id = #{weight_class_id},
+               minimum = #{minimum},
+               status = #{status},
+             <if test="reward_group_id!=''">
+               reward_group_id = #{reward_group_id},
+             </if>
+               date_modified = now()
+         WHERE product_id = #{product_id}
+    </update>
+    
+    <insert id="addProduct" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO my_product(model, sku, upc, ean, jan, icebox, mpn, location, manufacturer_id, price, tax_class_id, date_available, weight, weight_class_id, minimum, status, reward_group_id, date_added)
+            VALUES
+            ( 
+               #{model},
+               #{sku},
+               #{upc},
+               #{ean},
+               #{jan},
+               #{icebox},
+               #{mpn},
+               #{location},
+               #{manufacturer_id},
+               #{price},
+               #{tax_class_id},
+               #{date_available},
+               #{weight},
+               #{weight_class_id},
+               #{minimum},
+               #{status},
+               #{reward_group_id},
+               now()
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateProductQuantity" parameterType="hashmap">
+        <![CDATA[
+            UPDATE product_quantity 
+               SET quantity = #{quantity},
+                   date_modified = now()
+             WHERE model = #{model}
+        ]]>
+    </update>
+    
+    <insert id="addProductQuantity" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO product_quantity(model, product_quantity, date_added, date_modified)
+            VALUES
+            ( 
+               #{model},
+               #{product_quantity},
+               now(),
+               now()
+            )
+        ]]>
+    </insert>
+    
+    <select id="duplicateModel" parameterType="String" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM product_quantity p
+         WHERE model = #{model}
+    </select>
+    
+    <update id="updateImage" parameterType="hashmap">
+        UPDATE my_product 
+           SET image = #{image},
+               date_modified = now()
+         WHERE product_id = #{product_id}
+    </update>
+    
+    <select id="categoriesList" parameterType="hashmap" resultType="hashmap">
+        SELECT cp.category_id AS category_id,
+		       GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '||') AS name_path,
+		       cd2.name as category_name,
+		       c1.parent_id,
+		       c1.sort_order,
+		      (SELECT COUNT(*) FROM my_product_to_category ptc WHERE cp.category_id=ptc.category_id AND ptc.product_id=#{product_id}) AS checked
+		  FROM my_category_path cp LEFT JOIN my_category c1 ON (cp.category_id = c1.category_id)
+		       LEFT JOIN my_category c2 ON (cp.path_id = c2.category_id)
+		       LEFT JOIN my_category_description cd1 ON (cp.path_id = cd1.category_id)
+		       LEFT JOIN my_category_description cd2 ON (cp.category_id = cd2.category_id)
+		 WHERE cd1.language_id = #{language_id}
+		   AND cd2.language_id = #{language_id}
+		   AND c1.status = 1
+		   AND c2.status = 1
+		 GROUP BY cp.category_id
+		 ORDER BY cp.level
+    </select>
+    
+    <delete id="deleteProductCategory" parameterType="hashmap">
+        DELETE FROM my_product_to_category 
+         WHERE product_id = #{product_id}
+    </delete>
+    
+    <insert id="addProductCategory" parameterType="hashmap">
+        INSERT INTO my_product_to_category(product_id, category_id)
+        VALUES
+        ( 
+           #{product_id},
+           #{category_id}
+        )
+    </insert>
+    
+    <select id="diseaseSecurityContentsMedicine" parameterType="hashmap" resultType="hashmap">
+        SELECT sc.*,
+              (SELECT COUNT(*) FROM my_security_contents_medicine scm WHERE sc.contents_id = scm.contents_id AND scm.product_id=#{product_id} AND scm.medicine_id = #{medicine_id}) AS checked
+		  FROM my_security_contents sc
+		 WHERE sc.code = #{code}
+		 ORDER BY checked DESC, sc.title
+    </select>
+    
+    <select id="diseaseList" parameterType="hashmap" resultType="hashmap">
+        SELECT scm.product_id,
+		       dp.name,
+		       p.image
+		  FROM my_security_contents sc
+		       LEFT JOIN my_security_contents_medicine scm ON(sc.contents_id = scm.contents_id)
+		       LEFT JOIN my_product p ON(scm.product_id = p.product_id)
+		       LEFT JOIN my_product_description dp ON(p.product_id = dp.product_id)
+		 WHERE sc.code = 'disease'
+		   AND sc.contents_id = #{contents_id}
+		   AND scm.medicine_id = #{medicine_id}
+    </select>
+    
+    <delete id="deleteSecurityContentsMedicine" parameterType="hashmap">
+        DELETE FROM my_security_contents_medicine 
+         WHERE product_id = #{product_id}
+    </delete>
+    
+    <insert id="addSecurityContentsMedicine" parameterType="hashmap">
+        INSERT INTO my_security_contents_medicine(contents_id, medicine_id, product_id, status, date_added)
+        VALUES
+        ( 
+           #{contents_id},
+           #{medicine_id},
+           #{product_id},
+           #{status},
+           now()
+        )
+    </insert>
+    
+    <select id="productSpecial" parameterType="hashmap" resultType="hashmap">
+        SELECT ps.*,
+              (SELECT cgd.name FROM dr_customer_group_description cgd WHERE ps.customer_group_id = cgd.customer_group_id) AS customer_group_name
+		  FROM my_product_special ps 
+		 WHERE ps.product_id = #{product_id}
+		 ORDER BY ps.date_start DESC
+    </select>
+    
+    <insert id="addProductSpecial" parameterType="hashmap">
+        INSERT INTO my_product_special(product_id, customer_group_id, priority, price, date_start, date_end)
+        VALUES
+        ( 
+           #{product_id},
+           #{customer_group_id},
+           #{priority},
+           #{price},
+           #{date_start},
+           #{date_end}
+        )
+    </insert>
+    
+    <delete id="deleteProductSpecial" parameterType="hashmap">
+        DELETE FROM my_product_special 
+         WHERE product_special_id = #{product_special_id}
+    </delete>
+</mapper>

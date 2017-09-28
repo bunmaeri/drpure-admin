@@ -1,0 +1,300 @@
+<%@ page pageEncoding="utf-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="ctag" uri="/WEB-INF/tlds/CustomTag.tld"%>
+
+<jsp:useBean id="toDay" class="java.util.Date" />
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8" />
+        <title>${META_TITLE}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content="Preview page of Metronic Admin Theme #1 for recent ecommerce statistics, charts, recent orders and sales" name="description" />
+        <meta content="" name="author" />
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+        <link href="<c:url value='/assets/global/plugins/font-awesome/css/font-awesome.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value='/assets/global/plugins/simple-line-icons/simple-line-icons.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value='/assets/global/plugins/bootstrap/css/bootstrap.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value='/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <!-- END GLOBAL MANDATORY STYLES -->
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+      <c:forEach items="${HEADER_CSS}" var="css">
+		<link rel="stylesheet" type="text/css" href="<c:url value='${css}'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" />
+	  </c:forEach>
+        <!-- END PAGE LEVEL PLUGINS -->
+        <!-- BEGIN THEME GLOBAL STYLES -->
+        <link href="<c:url value='/assets/global/css/components-rounded.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" id="style_components" type="text/css">
+        <link href="<c:url value='/assets/global/css/plugins.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <!-- END THEME GLOBAL STYLES -->
+        <!-- BEGIN THEME LAYOUT STYLES -->
+        <link href="<c:url value='/assets/layouts/layout/css/layout.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value='/assets/layouts/layout/css/themes/blue.min.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" id="style_color" />
+        <link href="<c:url value='/assets/custom.css'/>?<fmt:formatDate value="${toDay}" pattern="yyyy-MM-dd HH:mm:ss" />" rel="stylesheet" type="text/css" />
+        <!-- END THEME LAYOUT STYLES -->
+        
+        <link rel="shortcut icon" href="/image/favicon.png" />
+        
+        <script id="fr-fek">try{(function (k){localStorage.FEK=k;t=document.getElementById('fr-fek');t.parentNode.removeChild(t);})('ifqtptbfhB-9C-8B-7lbA8sD-13F-11==')}catch(e){}</script>
+    </head>
+    <!-- END HEAD -->
+
+    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-sidebar-fixed">
+        <div class="page-wrapper">
+            <!-- BEGIN HEADER -->
+            <div class="page-header navbar navbar-fixed-top">
+                <!-- BEGIN HEADER INNER -->
+                <div class="page-header-inner ">
+                    <!-- BEGIN LOGO -->
+                    <div class="page-logo">
+                        <a href="/index.dr">
+                        	<span class="logo-default">Dr. Pure Natural</span>
+                            <!-- <img src="/image/favicon.png" alt="logo" class="logo-default" /> -->
+                        </a>
+                        <div class="menu-toggler sidebar-toggler">
+                            <span></span>
+                        </div>
+                    </div>
+                    <!-- END LOGO -->
+                    <!-- BEGIN HEADER SEARCH BOX -->
+                    <form class="search-form search-form-expanded" action="/search/top.dr" id="form-top">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="주문번호 조회" name="top_order_id" id="top_order_id">
+                            <span class="input-group-btn">
+                                <a href="javascript:;" id="button-top-query" class="btn submit">
+                                    <i class="icon-magnifier"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </form>
+<script type="text/javascript"><!--
+//검색
+$('#button-top-query').on('click', function() {
+	var order_id = $('#top_order_id').val();
+	var action = '/search/top.dr';
+	$("#form-top").attr("action", action);
+	$('#form-top').submit();
+});
+//--></script> 
+                    <!-- END HEADER SEARCH BOX -->
+                    <!-- BEGIN MEGA MENU -->
+                    <div class="hor-menu  hor-menu-light hidden-sm hidden-xs">
+                        <ul class="nav navbar-nav">
+                            <!-- DOC: Remove data-hover="megamenu-dropdown" and data-close-others="true" attributes below to disable the horizontal opening on mouse hover -->
+                            <li class="mega-menu-dropdown" aria-haspopup="true">
+                                <a href="javascript:;" class="dropdown-toggle" data-hover="megamenu-dropdown" data-close-others="true"> MY HOME DOC
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu" style="min-width: 700px;">
+                                    <li>
+                                        <!-- Content container to add padding -->
+                                        <div class="mega-menu-content">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <ul class="mega-menu-submenu">
+                                                        <li>
+                                                            <a href="/my_categories.dr">제품 카테고리</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_products.dr">제품 목록</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_products/reference.dr">참조된 제품 찾기</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="mega-menu-submenu">
+                                                        <li>
+                                                            <h3>컨텐츠 관리</h3>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/information.dr">유용 정보</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/notice.dr">메인페이지 공지사항</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/security/health.dr">건강정보</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/security/disease.dr">질병과 추천생약제</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/security/clinic.dr">임상사례</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/books.dr">책</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_contents/etc.dr">기타 컨텐츠</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <ul class="mega-menu-submenu">
+                                                        <li>
+                                                            <h3>레포트</h3>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/sales/order.dr">Sales Orders</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/sales/tax.dr">Sales Tax</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/sales/shipping.dr">Sales Shipping</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/products/viewed.dr">Products Viewed</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/products/purchased.dr">Products Purchased</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/customers/order.dr">Customers Orders</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/customers/reward.dr">Customers Reward Points</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="/my_reports/customers/donator.dr">Customers Donator</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                    <!-- END MEGA MENU -->
+                    
+                    <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+                    <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span></span>
+                    </a>
+                    <!-- END RESPONSIVE MENU TOGGLER -->
+                    <!-- BEGIN TOP NAVIGATION MENU -->
+                    <div class="top-menu">
+                        <ul class="nav navbar-nav pull-right">
+                            <!-- BEGIN NOTIFICATION DROPDOWN -->
+                            <!-- <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-bell"></i>
+                                    <span class="badge badge-default"> 7 </span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="external">
+                                        <h3>
+                                            <span class="bold">12 pending</span> notifications</h3>
+                                        <a href="page_user_profile_1.html">view all</a>
+                                    </li>
+                                    <li>
+                                        <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="time">just now</span>
+                                                    <span class="details">
+                                                        <span class="label label-sm label-icon label-success">
+                                                            <i class="fa fa-plus"></i>
+                                                        </span> New user registered. </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li> -->
+                            <!-- END NOTIFICATION DROPDOWN -->
+                            <!-- BEGIN INBOX DROPDOWN -->
+                            <!-- <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-envelope-open"></i>
+                                    <span class="badge badge-default"> 4 </span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="external">
+                                        <h3>You have
+                                            <span class="bold">7 New</span> Messages</h3>
+                                        <a href="app_inbox.html">view all</a>
+                                    </li>
+                                    <li>
+                                        <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                                            <li>
+                                                <a href="#">
+                                                    <span class="photo">
+                                                        <img src="../assets/layouts/layout3/img/avatar2.jpg" class="img-circle" alt=""> </span>
+                                                    <span class="subject">
+                                                        <span class="from"> Lisa Wong </span>
+                                                        <span class="time">Just Now </span>
+                                                    </span>
+                                                    <span class="message"> Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li> -->
+                            <!-- END INBOX DROPDOWN -->
+                            <!-- BEGIN TODO DROPDOWN -->
+                            <!-- <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-calendar"></i>
+                                    <span class="badge badge-default"> 3 </span>
+                                </a>
+                                <ul class="dropdown-menu extended tasks">
+                                    <li class="external">
+                                        <h3>You have
+                                            <span class="bold">12 pending</span> tasks</h3>
+                                        <a href="app_todo.html">view all</a>
+                                    </li>
+                                    <li>
+                                        <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                                            <li>
+                                                <a href="javascript:;">
+                                                    <span class="task">
+                                                        <span class="desc">New release v1.2 </span>
+                                                        <span class="percent">30%</span>
+                                                    </span>
+                                                    <span class="progress">
+                                                        <span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="sr-only">40% Complete</span>
+                                                        </span>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li> -->
+                            <!-- END TODO DROPDOWN -->
+                            <!-- BEGIN QUICK SIDEBAR TOGGLER -->
+                            <!-- <li class="dropdown dropdown-quick-sidebar-toggler">
+                                <a href="javascript:;" class="dropdown-toggle">
+                                    <i class="icon-lock-open"></i>
+                                </a>
+                            </li> -->
+                            <!-- END QUICK SIDEBAR TOGGLER -->
+                        </ul>
+                    </div>
+                    <!-- END TOP NAVIGATION MENU -->
+                </div>
+                <!-- END HEADER INNER -->
+            </div>
+            <!-- END HEADER -->
+            <!-- BEGIN HEADER & CONTENT DIVIDER -->
+            <div class="clearfix"> </div>
+            <!-- END HEADER & CONTENT DIVIDER -->
+            <!-- BEGIN CONTAINER -->
+            <div class="page-container">

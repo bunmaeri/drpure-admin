@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contentsHealth">
+    <select id="health" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_info_health
+         WHERE language_id = #{language_id}
+    </select>
+    
+    <select id="healthContents" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT *
+          FROM dr_info_health_contents
+         WHERE language_id = #{language_id}
+         ORDER BY contents_name ASC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalHealthContents" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_info_health_contents
+    </select>
+    
+    <select id="healthInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_info_health
+         WHERE language_id = #{language_id}
+    </select>
+    
+    <select id="healthContentsInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_info_health_contents
+         WHERE contents_id = #{contents_id}
+           AND language_id = #{language_id}
+    </select>
+    
+    <select id="isHealthContents" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_info_health_contents
+         WHERE contents_id = #{contents_id}
+           AND language_id = #{language_id}
+    </select>
+    
+    <update id="updateHealth" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_info_health 
+               SET info_name = #{info_name},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   status = #{status},
+                   date_modified = NOW()
+             WHERE language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <update id="updateHealthContents" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_info_health_contents 
+               SET contents_name = #{contents_name},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   status = #{status},
+                   date_modified = NOW()
+             WHERE contents_id = #{contents_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <select id="maxHealthContentsId" parameterType="hashmap" resultType="int">
+        SELECT MAX(contents_id)+1 AS contents_id
+          FROM dr_info_health_contents
+    </select>
+    
+    <insert id="addHealthContents" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_info_health_contents(contents_id, language_id, contents_name, image, description, meta_title, meta_description, meta_keyword, status, date_added)
+            VALUES
+            (
+                #{contents_id},
+                #{language_id},
+                #{contents_name},
+                #{image},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword},
+                #{status},
+                NOW()
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteHealthContents" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_info_health_contents 
+             WHERE contents_id = #{contents_id}
+        ]]>
+    </delete>
+</mapper>

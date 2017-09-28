@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="salesOrders">
+    <select id="totalOrder" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_order o
+      <choose>
+      <when test="order_status_id==null or order_status_id==''">
+         WHERE o.order_status_id > '0'
+      </when>
+      <otherwise>
+         WHERE o.order_status_id = #{order_status_id}
+      </otherwise>
+      </choose>
+      <if test="order_id!=null and order_id!=''">
+           AND o.order_id LIKE CONCAT('%',#{order_id},'%')
+      </if>
+      <if test="customer_name!=null and customer_name!=''">
+           AND (o.customer_name LIKE CONCAT('%',#{customer_name},'%') OR o.shipping_customer_name LIKE CONCAT('%',#{customer_name},'%'))
+      </if>
+      <if test="customer_id!=null and customer_id!=''">
+           AND o.customer_id = #{customer_id}
+      </if>
+      <if test="date_added!=null and date_added!=''">
+           AND DATE(o.date_added) = #{date_added}
+      </if>
+      <if test="ship_country!=null and ship_country!=''">
+           AND o.shipping_country_id = #{ship_country}
+      </if>
+      <if test="ship_shippingfee!=null and ship_shippingfee!=''">
+           AND o.shippingfee_type = #{ship_shippingfee}
+      </if>
+      <choose>
+      <when test="icebox==null or icebox==''">
+      </when>
+      <when test="icebox==1">
+           AND o.order_id in (SELECT order_id FROM dr_product p, dr_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id
+                                   UNION ALL
+                                  SELECT order_id FROM my_product p, my_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+      </when>
+      <otherwise>
+           AND o.order_id not in (SELECT order_id FROM dr_product p, dr_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id
+                               UNION ALL
+                              SELECT order_id FROM my_product p, my_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+      </otherwise>
+      </choose>
+      <if test="array!=null and array!=''">
+           AND o.order_id IN
+	    <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+        </foreach>
+      </if>
+    </select>
+    
+    <select id="listOrder" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+      <![CDATA[
+        SELECT o.order_id,
+               o.store_id,
+               o.customer_name,
+               o.shipping_customer_name,
+              (IFNULL(REs.point_t_sp,0) + IFNULL(REs2.point_t_get,0)) AS reward,
+               o.email,
+               o.shippingfee_type,
+               o.shipping_country_id,
+               o.payment_method,
+               UPPER(o.carrier_id) AS carrier_name,
+               o.total,
+               DATE_FORMAT(o.date_added, '%Y-%m-%d') AS order_date,
+               o.date_modified,
+               o.tracking,
+               o.invoice_no,
+               o.invoice_prefix, 
+               o.customer_id,
+               o.requisition_id,
+               o.order_status_id,
+               cy.name,
+               cy.iso_code_3,
+               CASE WHEN o.order_status_id IN(1,2,34) THEN
+                        (SELECT count(so.customer_id) AS count_id FROM dr_order so WHERE so.shipping_customer_name=o.shipping_customer_name AND so.order_status_id IN(1,2,34))
+                    ELSE 0
+                    END AS customer_order_count,
+               o.customer_group_id,
+              (SELECT ocgd.name FROM dr_customer_group_description ocgd WHERE ocgd.customer_group_id = o.customer_group_id) AS customer_group,
+               CASE WHEN o.store_id=0 THEN
+                        (SELECT SUM(sp.icebox) FROM dr_order_product sop LEFT JOIN dr_product sp ON sop.product_id=sp.product_id WHERE sop.order_id = o.order_id AND sp.icebox=1)
+                    ELSE
+                        (SELECT SUM(sp.icebox) FROM my_order_product sop LEFT JOIN my_product sp ON sop.product_id=sp.product_id WHERE sop.order_id = o.order_id AND sp.icebox=1)
+                    END AS icebox
+          FROM dr_order o
+               LEFT JOIN (SELECT order_id, points AS point_t_sp FROM dr_customer_reward WHERE points < 0 ) AS REs ON REs.order_id = o.order_id
+               LEFT JOIN (SELECT order_id, points AS point_t_get FROM dr_customer_reward WHERE points > 0) AS REs2 ON REs2.order_id = o.order_id
+               LEFT JOIN dr_customer AS c ON c.customer_id = o.customer_id
+               LEFT JOIN dr_country AS cy ON cy.country_id = o.shipping_country_id
+      ]]>
+      <choose>
+      <when test="order_status_id==null or order_status_id==''">
+         WHERE o.order_status_id > '0'
+      </when>
+      <otherwise>
+         WHERE o.order_status_id = #{order_status_id}
+      </otherwise>
+      </choose>
+      <if test="order_id!=null and order_id!=''">
+           AND o.order_id LIKE CONCAT('%',#{order_id},'%')
+      </if>
+      <if test="customer_name!=null and customer_name!=''">
+           AND (o.customer_name LIKE CONCAT('%',#{customer_name},'%') OR o.shipping_customer_name LIKE CONCAT('%',#{customer_name},'%'))
+      </if>
+      <if test="customer_id!=null and customer_id!=''">
+           AND o.customer_id = #{customer_id}
+      </if>
+      <if test="date_added!=null and date_added!=''">
+           AND DATE(o.date_added) = #{date_added}
+      </if>
+      <if test="ship_country!=null and ship_country!=''">
+           AND o.shipping_country_id = #{ship_country}
+      </if>
+      <if test="ship_shippingfee!=null and ship_shippingfee!=''">
+           AND o.shippingfee_type = #{ship_shippingfee}
+      </if>
+      <choose>
+      <when test="icebox==null or icebox==''">
+      </when>
+      <when test="icebox==1">
+           AND o.order_id in (SELECT order_id FROM dr_product p, dr_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id
+                                   UNION ALL
+                                  SELECT order_id FROM my_product p, my_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+      </when>
+      <otherwise>
+           AND o.order_id not in (SELECT order_id FROM dr_product p, dr_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id
+                               UNION ALL
+                              SELECT order_id FROM my_product p, my_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+      </otherwise>
+      </choose>
+      <if test="array!=null and array!=''">
+           AND o.order_id IN
+	    <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+        </foreach>
+      </if>
+      <choose>
+      <when test="customer_id!=null and customer_id!=''">
+         ORDER BY o.date_added DESC
+      </when>
+      <otherwise>
+         ORDER BY o.order_id DESC
+      </otherwise>
+      </choose>
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="invoiceOrderCnt" parameterType="hashmap" resultType="hashmap">
+        SELECT COUNT(o.order_id) AS cnt,
+		       o.store_id
+		  FROM dr_order o
+		 WHERE o.order_status_id = 34
+		 GROUP BY o.store_id
+    </select>
+    
+    <select id="invoiceOrderCntIce" parameterType="hashmap" resultType="hashmap">
+        SELECT COUNT(o.order_id) AS cnt,
+		       o.store_id
+		  FROM dr_order o
+		 WHERE o.order_status_id = 34
+		   AND o.order_id in (SELECT order_id FROM dr_product p, dr_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id
+                               UNION ALL
+                              SELECT order_id FROM my_product p, my_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+		 GROUP BY o.store_id
+    </select>
+    
+    <select id="listOrderForAction" parameterType="hashmap" resultType="hashmap">
+        SELECT order_id, store_id, customer_id FROM dr_order WHERE order_status_id = #{order_status_id}
+           AND order_id IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+        </foreach>
+         ORDER BY order_id
+    </select>
+    
+    <update id="updateOrderStatus" parameterType="hashmap">
+        UPDATE dr_order
+           SET order_status_id = #{order_status_id},
+               date_modified = now()
+           <if test="carrier_id!=null and carrier_id!=''">
+              ,carrier_id = #{carrier_id}
+           </if>
+           <if test="tracking!=null and tracking!=''">
+              ,tracking = #{tracking}
+           </if>
+         WHERE order_id = #{order_id}
+    </update>
+    
+    <select id="countCustomerRewardForDuplication" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_customer_reward
+         WHERE order_id = #{order_id}
+           AND description LIKE CONCAT('Order ID: #','%')
+    </select>
+    
+    <insert id="addCustomerReward" parameterType="hashmap">
+        INSERT INTO dr_customer_reward(customer_id, order_id, description, points, date_added)
+        SELECT #{customer_id},
+               o.order_id,
+               #{description},
+               IFNULL(SUM(op.reward),0),
+               NOW()
+          FROM dr_order o, ${table_prefix}_order_product op
+         WHERE o.order_id = op.order_id
+           AND o.order_id = #{order_id}
+    </insert>
+    
+    <insert id="addOrderHistory" parameterType="hashmap">
+        INSERT INTO ${table_prefix}_order_history(order_id, order_status_id, notify, comment, date_added)
+        VALUES
+        (
+          #{order_id},
+          #{order_status_id},
+          #{notify},
+          #{comment},
+          NOW()
+         )
+    </insert>
+    
+    <update id="updateProductQuantityPlus" parameterType="hashmap">
+        <![CDATA[
+            UPDATE product_quantity 
+               SET quantity = quantity + #{quantity},
+		           date_modified = NOW()
+             WHERE model = #{model}
+        ]]>
+    </update>
+    
+    <update id="updateProductQuantityMinus" parameterType="hashmap">
+        <![CDATA[
+            UPDATE product_quantity 
+               SET quantity = quantity - #{quantity},
+		           date_modified = NOW()
+             WHERE model = #{model}
+        ]]>
+    </update>
+
+    <select id="selectProductQuantity" parameterType="hashmap" resultType="int">
+        <![CDATA[
+            SELECT IFNULL(quantity,0) AS quantity
+              FROM product_quantity
+             WHERE model = #{model}
+        ]]>
+    </select>
+    
+    <update id="updateProductStockStatus" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_product 
+               SET stock_status_id = #{stock_status_id}
+             WHERE model = #{model}
+        ]]>
+    </update>
+    
+    <update id="updateProductQuantityToZero" parameterType="hashmap">
+        <![CDATA[
+            UPDATE product_quantity 
+               SET quantity = 0,
+                   date_modified = NOW()
+             WHERE model = #{model}
+        ]]>
+    </update>
+    
+    <update id="createInvoiceNo" parameterType="hashmap">
+        UPDATE dr_order
+           SET invoice_no = #{order_id},
+               invoice_prefix = #{invoice_prefix}
+         WHERE order_id = #{order_id}
+    </update>
+    
+    <select id="printInvoice" parameterType="hashmap" resultType="hashmap">
+        SELECT o.order_id,
+		       o.invoice_no,
+		       o.invoice_prefix,
+		       o.store_id,
+		       o.store_name,
+		       o.store_url,
+		       o.customer_name,
+		       o.firstname,
+		       o.lastname,
+		       o.email,
+		       o.telephone,
+		       o.payment_customer_name,
+		       o.payment_firstname,
+		       o.payment_lastname,
+		       o.payment_company,
+		       o.payment_address_1,
+		       o.payment_address_2,
+		       o.payment_city,
+		       o.payment_postcode,
+		       o.payment_country,
+		       o.payment_country_id,
+		       o.payment_zone,
+		       o.payment_zone_id,
+		       o.shipping_customer_name,
+		       o.shipping_firstname,
+		       o.shipping_lastname,
+		       o.shipping_company,
+		       o.shipping_address_1,
+		       o.shipping_address_2,
+		       o.shipping_city,
+		       o.shipping_postcode,
+		       o.shipping_country,
+		       o.shipping_country_id,
+		       o.shipping_zone,
+		       o.shipping_zone_id,
+		       o.shipping_telephone,
+		       o.requisition_id,
+		       o.payment_method,
+		       o.shipping_method,
+		       DATE_FORMAT(o.date_added, "%Y-%m-%d") AS order_date,
+		       o.comment,
+		       p.product_id,
+			   pd.name,
+			   p.ean,
+			   p.jan,
+			   p.icebox,
+			   p.model,
+			   m.name AS manufacturer_name,
+			   ROUND(p.price,2) AS price,
+			   op.quantity,
+		       ROUND(op.total,2) AS total,
+		       sso.sum_total,
+	           sso.sum_count
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_product op ON (o.order_id=op.order_id)
+		       LEFT JOIN ${table_prefix}_product p ON (op.product_id=p.product_id)
+		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
+		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
+		       LEFT JOIN (SELECT SUM(so.total) AS sum_total,
+		                         COUNT(so.order_id) AS sum_count,
+		                         so.customer_id
+		                    FROM dr_order so
+		                   GROUP BY so.customer_id
+		                  ) sso ON (sso.customer_id=o.customer_id)
+		 WHERE o.order_id IN
+	   <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+       </foreach>
+           AND o.store_id = #{store_id}
+		 ORDER BY o.order_id DESC, op.order_product_id ASC
+    </select>
+    
+    <select id="printInvoiceNotIce" parameterType="hashmap" resultType="hashmap">
+        SELECT o.order_id,
+		       o.invoice_no,
+		       o.invoice_prefix,
+		       o.store_id,
+		       o.store_name,
+		       o.store_url,
+		       o.customer_name,
+		       o.firstname,
+		       o.lastname,
+		       o.email,
+		       o.telephone,
+		       o.payment_customer_name,
+		       o.payment_firstname,
+		       o.payment_lastname,
+		       o.payment_company,
+		       o.payment_address_1,
+		       o.payment_address_2,
+		       o.payment_city,
+		       o.payment_postcode,
+		       o.payment_country,
+		       o.payment_country_id,
+		       o.payment_zone,
+		       o.payment_zone_id,
+		       o.shipping_customer_name,
+		       o.shipping_firstname,
+		       o.shipping_lastname,
+		       o.shipping_company,
+		       o.shipping_address_1,
+		       o.shipping_address_2,
+		       o.shipping_city,
+		       o.shipping_postcode,
+		       o.shipping_country,
+		       o.shipping_country_id,
+		       o.shipping_zone,
+		       o.shipping_zone_id,
+		       o.shipping_telephone,
+		       o.requisition_id,
+		       o.payment_method,
+		       o.shipping_method,
+		       DATE_FORMAT(o.date_added, "%Y-%m-%d") AS order_date,
+		       o.comment,
+		       p.product_id,
+			   pd.name,
+			   p.ean,
+			   p.jan,
+			   p.icebox,
+			   p.model,
+			   m.name AS manufacturer_name,
+			   ROUND(p.price,2) AS price,
+			   op.quantity,
+		       ROUND(op.total,2) AS total,
+		       sso.sum_total,
+	           sso.sum_count
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_product op ON (o.order_id=op.order_id)
+		       LEFT JOIN ${table_prefix}_product p ON (op.product_id=p.product_id)
+		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
+		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
+		       LEFT JOIN (SELECT SUM(so.total) AS sum_total,
+		                         COUNT(so.order_id) AS sum_count,
+		                         so.customer_id
+		                    FROM dr_order so
+		                   GROUP BY so.customer_id
+		                  ) sso ON (sso.customer_id=o.customer_id)
+		 WHERE o.order_id IN
+	   <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+       </foreach>
+           AND o.store_id = #{store_id}
+           AND o.order_id not in (SELECT order_id FROM ${table_prefix}_product p, ${table_prefix}_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+		 ORDER BY o.order_id DESC, op.order_product_id ASC
+    </select>
+    
+    <select id="printInvoiceIce" parameterType="hashmap" resultType="hashmap">
+        SELECT o.order_id,
+		       o.invoice_no,
+		       o.invoice_prefix,
+		       o.store_id,
+		       o.store_name,
+		       o.store_url,
+		       o.customer_name,
+		       o.firstname,
+		       o.lastname,
+		       o.email,
+		       o.telephone,
+		       o.payment_customer_name,
+		       o.payment_firstname,
+		       o.payment_lastname,
+		       o.payment_company,
+		       o.payment_address_1,
+		       o.payment_address_2,
+		       o.payment_city,
+		       o.payment_postcode,
+		       o.payment_country,
+		       o.payment_country_id,
+		       o.payment_zone,
+		       o.payment_zone_id,
+		       o.shipping_customer_name,
+		       o.shipping_firstname,
+		       o.shipping_lastname,
+		       o.shipping_company,
+		       o.shipping_address_1,
+		       o.shipping_address_2,
+		       o.shipping_city,
+		       o.shipping_postcode,
+		       o.shipping_country,
+		       o.shipping_country_id,
+		       o.shipping_zone,
+		       o.shipping_zone_id,
+		       o.shipping_telephone,
+		       o.requisition_id,
+		       o.payment_method,
+		       o.shipping_method,
+		       DATE_FORMAT(o.date_added, "%Y-%m-%d") AS order_date,
+		       o.comment,
+		       p.product_id,
+			   pd.name,
+			   p.ean,
+			   p.jan,
+			   p.icebox,
+			   p.model,
+			   m.name AS manufacturer_name,
+			   ROUND(p.price,2) AS price,
+			   op.quantity,
+		       ROUND(op.total,2) AS total,
+		       sso.sum_total,
+	           sso.sum_count
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_product op ON (o.order_id=op.order_id)
+		       LEFT JOIN ${table_prefix}_product p ON (op.product_id=p.product_id)
+		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
+		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
+		       LEFT JOIN (SELECT SUM(so.total) AS sum_total,
+		                         COUNT(so.order_id) AS sum_count,
+		                         so.customer_id
+		                    FROM dr_order so
+		                   GROUP BY so.customer_id
+		                  ) sso ON (sso.customer_id=o.customer_id)
+		 WHERE o.order_id IN
+	   <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+       </foreach>
+           AND o.store_id = #{store_id}
+           AND o.order_id in (SELECT order_id FROM ${table_prefix}_product p, ${table_prefix}_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+		 ORDER BY o.order_id DESC, op.order_product_id ASC
+    </select>
+    
+    <select id="printInvoiceOne" parameterType="hashmap" resultType="hashmap">
+        SELECT o.order_id,
+		       o.invoice_no,
+		       o.invoice_prefix,
+		       o.store_id,
+		       o.store_name,
+		       o.store_url,
+		       o.customer_name,
+		       o.firstname,
+		       o.lastname,
+		       o.email,
+		       o.telephone,
+		       o.payment_customer_name,
+		       o.payment_firstname,
+		       o.payment_lastname,
+		       o.payment_company,
+		       o.payment_address_1,
+		       o.payment_address_2,
+		       o.payment_city,
+		       o.payment_postcode,
+		       o.payment_country,
+		       o.payment_country_id,
+		       o.payment_zone,
+		       o.payment_zone_id,
+		       o.shipping_customer_name,
+		       o.shipping_firstname,
+		       o.shipping_lastname,
+		       o.shipping_company,
+		       o.shipping_address_1,
+		       o.shipping_address_2,
+		       o.shipping_city,
+		       o.shipping_postcode,
+		       o.shipping_country,
+		       o.shipping_country_id,
+		       o.shipping_zone,
+		       o.shipping_zone_id,
+		       o.shipping_telephone,
+		       o.requisition_id,
+		       o.payment_method,
+		       o.shipping_method,
+		       DATE_FORMAT(o.date_added, "%Y-%m-%d") AS order_date,
+		       o.comment,
+		       p.product_id,
+			   pd.name,
+			   p.ean,
+			   p.jan,
+			   p.icebox,
+			   p.model,
+			   m.name AS manufacturer_name,
+			   ROUND(p.price,2) AS price,
+			   op.quantity,
+		       ROUND(op.total,2) AS total,
+		       sso.sum_total,
+	           sso.sum_count
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_product op ON (o.order_id=op.order_id)
+		       LEFT JOIN ${table_prefix}_product p ON (op.product_id=p.product_id)
+		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
+		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
+		       LEFT JOIN (SELECT SUM(so.total) AS sum_total,
+		                         COUNT(so.order_id) AS sum_count,
+		                         so.customer_id
+		                    FROM dr_order so
+		                   GROUP BY so.customer_id
+		                  ) sso ON (sso.customer_id=o.customer_id)
+		 WHERE o.order_id = #{order_id}
+    </select>
+    
+    <select id="listOrderForTracking" parameterType="hashmap" resultType="hashmap">
+        SELECT *,
+               DATE_FORMAT(date_added, "%Y-%m-%d") AS order_date
+          FROM dr_order
+         WHERE order_status_id = #{order_status_id}
+           AND shipping_country_id = #{shipping_country_id}
+         ORDER BY order_id
+    </select>
+
+	<update id="updateOrdersStatusChange" parameterType="hashmap">
+        UPDATE dr_order
+           SET order_status_id = #{order_status_id},
+               date_modified = now()
+         WHERE order_id IN
+	   <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+       </foreach>
+    </update>
+    
+    <select id="orderView" parameterType="hashmap" resultType="hashmap">
+        SELECT o.order_id,
+		       o.invoice_no,
+		       o.invoice_prefix,
+		       o.store_id,
+		       o.store_name,
+		       o.store_url,
+		       o.customer_name,
+		       o.firstname,
+		       o.lastname,
+		       o.email,
+		       o.telephone,
+		       o.payment_customer_name,
+		       o.payment_firstname,
+		       o.payment_lastname,
+		       o.payment_company,
+		       o.payment_address_1,
+		       o.payment_address_2,
+		       o.payment_city,
+		       o.payment_postcode,
+		       o.payment_country,
+		       o.payment_country_id,
+		       o.payment_zone,
+		       o.payment_zone_id,
+		       IFNULL(o.payment_telephone,'') AS payment_telephone,
+		       IFNULL(o.payment_requisition_id,'') AS payment_requisition_id,
+		       IFNULL(o.payment_address_id,'') AS payment_address_id,
+		       o.shipping_customer_name,
+		       o.shipping_firstname,
+		       o.shipping_lastname,
+		       o.shipping_company,
+		       o.shipping_address_1,
+		       o.shipping_address_2,
+		       o.shipping_city,
+		       o.shipping_postcode,
+		       o.shipping_country,
+		       o.shipping_country_id,
+		       o.shipping_zone,
+		       o.shipping_zone_id,
+		       o.shipping_telephone,
+		       o.requisition_id,
+		       IFNULL(o.shipping_address_id,'') AS shipping_address_id,
+		       o.payment_method,
+		       o.shipping_method,
+		       o.order_status_id,
+		      (SELECT os.name FROM dr_order_status os WHERE os.order_status_id=o.order_status_id) AS order_status_name,
+		       o.total,
+		       o.date_added,
+		       DATE_FORMAT(o.date_added, "%Y-%m-%d %r") AS order_date,
+		       o.comment,
+		       c.customer_id,
+		       c.customer_group_id,
+		       c.customer_name,
+		       c.firstname,
+		       c.lastname,
+		       c.email,
+		       c.telephone,
+		       c.myhomedoc,
+		       DATE_FORMAT(c.date_added, "%Y-%m-%d") AS join_date,
+		      (SELECT cgd.name FROM dr_customer_group_description cgd WHERE cgd.customer_group_id=c.customer_group_id) AS customer_grorup_name,
+		       IFNULL((SELECT SUM(cr.points) FROM dr_customer_reward cr WHERE cr.order_id=o.order_id AND cr.customer_id=o.customer_id), 0) AS points
+		  FROM dr_order o
+		       LEFT JOIN dr_customer c ON (o.customer_id=c.customer_id)
+		 WHERE o.order_id = #{order_id}
+    </select>
+    
+    <select id="orderProducts" parameterType="hashmap" resultType="hashmap">
+        SELECT p.product_id,
+			   pd.name,
+			   p.ean,
+			   p.jan,
+			   p.icebox,
+			   p.model,
+			   m.name AS manufacturer_name,
+			   p.price,
+			   op.quantity,
+		       op.total,
+		       op.tax,
+		       op.reward
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_product op ON (o.order_id=op.order_id)
+		       LEFT JOIN ${table_prefix}_product p ON (op.product_id=p.product_id)
+		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
+		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
+		 WHERE o.order_id = #{order_id}
+		 ORDER BY op.order_product_id ASC
+    </select>
+    
+    <select id="orderTotals" parameterType="hashmap" resultType="hashmap">
+        SELECT ot.order_total_id,
+		       ot.code,
+		       ot.title,
+			   ot.value
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_total ot ON (o.order_id=ot.order_id)
+	     WHERE o.order_id = #{order_id}
+		 ORDER BY ot.sort_order ASC
+    </select>
+    
+    <select id="orderHistories" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+        SELECT oh.order_status_id,
+		       oh.notify,
+		       REPLACE(REPLACE(oh.comment,char(13),'</br>'),char(10),'</br>') AS comment,
+			   oh.date_added,
+			   DATE_FORMAT(oh.date_added, '%Y-%m-%d %r') AS history_date
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_history oh ON (o.order_id=oh.order_id)
+	     WHERE o.order_id = #{order_id}
+		 ORDER BY oh.order_history_id ASC
+      ]]>
+    </select>
+    
+    <update id="updateOrderPaymentInfo" parameterType="hashmap">
+        UPDATE dr_order
+           SET payment_customer_name = #{customer_name},
+               payment_firstname = #{firstname},
+               payment_lastname = #{lastname},
+               payment_company = #{company},
+               payment_address_1 = #{address_1},
+               payment_address_2 = #{address_2},
+               payment_city = #{city},
+               payment_postcode = #{postcode},
+               payment_country = #{country},
+               payment_country_id = #{country_id},
+               payment_zone = #{zone},
+               payment_zone_id = #{zone_id},
+               payment_telephone = #{telephone}
+           <if test="address_id!=null and address_id!=''">
+              ,payment_address_id = #{address_id}
+           </if>
+         WHERE order_id = #{order_id}
+    </update>
+    
+    <update id="updateAddress" parameterType="hashmap">
+        UPDATE dr_address
+           SET customer_name = #{customer_name},
+               firstname = #{firstname},
+               lastname = #{lastname},
+               company = #{company},
+               address_1 = #{address_1},
+               address_2 = #{address_2},
+               city = #{city},
+               postcode = #{postcode},
+               telephone = #{telephone},
+               country_id = #{country_id},
+               zone_id = #{zone_id}
+             <if test="requisition_id!=null and requisition_id!=''">
+              ,requisition_id = #{requisition_id}
+             </if>
+         WHERE address_id = #{address_id}
+    </update>
+    
+    <update id="updateOrderShippingInfo" parameterType="hashmap">
+        UPDATE dr_order
+           SET shipping_customer_name = #{customer_name},
+               shipping_firstname = #{firstname},
+               shipping_lastname = #{lastname},
+               shipping_company = #{company},
+               shipping_address_1 = #{address_1},
+               shipping_address_2 = #{address_2},
+               shipping_city = #{city},
+               shipping_postcode = #{postcode},
+               shipping_country = #{country},
+               shipping_country_id = #{country_id},
+               shipping_zone = #{zone},
+               shipping_zone_id = #{zone_id},
+               shipping_telephone = #{telephone},
+               requisition_id = #{requisition_id}
+           <if test="address_id!=null and address_id!=''">
+              ,shipping_address_id = #{address_id}
+           </if>
+         WHERE order_id = #{order_id}
+    </update>
+    
+    <select id="searchOrder" parameterType="String" resultType="hashmap">
+        SELECT order_id, store_id
+          FROM dr_order
+         WHERE order_id LIKE CONCAT('%',#{value},'%')
+    </select>
+</mapper>

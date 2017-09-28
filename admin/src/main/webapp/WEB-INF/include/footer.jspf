@@ -1,0 +1,25 @@
+<%@ page pageEncoding="utf-8"%>
+<form id="commonForm" name="commonForm"></form>
+<footer id="footer"> &copy; 2009-2017 All Rights Reserved.</footer>
+</div>
+
+<!-- Include external JS libs. -->
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
+
+<!-- Include Editor JS files. -->
+<script type="text/javascript" src="/view/javascript/froala/languages/ko.js"></script>
+<script type="text/javascript" src="/view/javascript/froala/image.min.js"></script>
+<script type="text/javascript" src="/view/javascript/froala/froala_editor.pkgd.js?20170509"></script>
+<script type="text/javascript" src="/view/javascript/froala/opencart.js?20170502"></script>
+
+<script type="text/javascript">
+function pingServer() {
+    $.ajax({ url: location.href });
+    //alert();
+}
+$(document).ready(function() {
+    //setInterval('pingServer()', 60000);
+});
+</script>

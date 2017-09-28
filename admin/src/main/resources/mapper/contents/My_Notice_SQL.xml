@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_contentsNotice">
+    <select id="notice" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT *
+          FROM my_contents i
+         WHERE i.language_id = #{language_id}
+           AND i.code = #{code}
+         ORDER BY i.sort_order ASC
+    <include refid="common.pagingSub"/> 
+    </select>
+   
+    <select id="totalNotice" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM my_contents
+    </select>
+    
+    <select id="noticeInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM my_contents i
+         WHERE i.contents_id = #{contents_id}
+           AND i.language_id = #{language_id}
+    </select>
+    
+    <select id="isNotice" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM my_contents i
+         WHERE i.contents_id = #{contents_id}
+           AND i.language_id = #{language_id}
+    </select>
+    
+    <update id="updateNotice" parameterType="hashmap">
+        <![CDATA[
+            UPDATE my_contents 
+               SET title = #{title},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   sort_order = #{sort_order},
+                   status = #{status}
+             WHERE contents_id = #{contents_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <select id="maxContentsId" parameterType="hashmap" resultType="int">
+        SELECT MAX(contents_id)+1 AS contents_id
+          FROM my_contents
+    </select>
+    
+    <insert id="addNotice" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO my_contents(contents_id, language_id, title, code, description, meta_title, meta_description, meta_keyword, sort_order, status)
+            VALUES
+            (
+                #{contents_id},
+                #{language_id},
+                #{title},
+                #{code},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword},
+                #{sort_order},
+                #{status}
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteNotice" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM my_contents 
+             WHERE contents_id = #{contents_id}
+        ]]>
+    </delete>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_books">
+    <select id="books" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM my_book
+         WHERE language_id = #{language_id}
+         ORDER BY sort_order ASC
+    </select>
+    
+    <select id="bookInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM my_book
+         WHERE book_id = #{book_id}
+           AND language_id = #{language_id}
+    </select>
+    
+    <select id="isBook" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM my_book
+         WHERE book_id = #{book_id}
+           AND language_id = #{language_id}
+    </select>
+    
+    <update id="updateBook" parameterType="hashmap">
+        <![CDATA[
+            UPDATE my_book 
+               SET title = #{title},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   sort_order = #{sort_order},
+                   is_main = #{is_main},
+                   status = #{status}
+             WHERE book_id = #{book_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <select id="maxBookId" parameterType="hashmap" resultType="int">
+        SELECT MAX(book_id)+1 AS book_id
+          FROM my_book
+    </select>
+    
+    <insert id="addBook" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO my_book(book_id, language_id, title, description, meta_title, meta_description, meta_keyword, sort_order, is_main, hits, status)
+            VALUES
+            (
+                #{book_id},
+                #{language_id},
+                #{title},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword},
+                #{sort_order},
+                1,
+                0,
+                #{status}
+            )
+        ]]>
+    </insert>
+    
+    <update id="updateImage" parameterType="hashmap">
+        <![CDATA[
+            UPDATE my_book 
+               SET image = #{image}
+             WHERE book_id = #{book_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <delete id="deleteBook" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM my_book 
+             WHERE book_id = #{book_id}
+        ]]>
+    </delete>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system_languages">
+    <select id="languages" resultType="hashmap">
+        SELECT * FROM dr_language WHERE status=1
+    </select>
+    
+    <select id="languageInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT * FROM dr_language WHERE language_id = #{language_id}
+    </select>
+    
+    <update id="updateLanguage" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_language 
+               SET name = #{name},
+                   sort_order = #{sort_order},
+                   status = #{status}
+             WHERE language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <update id="updateImage" parameterType="hashmap">
+        UPDATE dr_language 
+           SET image = #{image}
+         WHERE language_id = #{language_id}
+    </update>
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_reportCustomers">
+    <select id="order" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT t.customer_id, t.customer_name, t.email, t.customer_group, t.status, COUNT(DISTINCT t.order_id) AS orders, SUM(t.products) AS products, SUM(t.total) AS total
+         FROM (SELECT c.customer_id, c.customer_name, c.email,
+                      cgd.name AS customer_group,
+                      c.status, o.order_id,
+                      SUM(op.quantity) as products,
+                      SUM(o.total) AS total
+                 FROM dr_order o LEFT JOIN my_order_product op ON (o.order_id = op.order_id)
+                      LEFT JOIN dr_customer c ON (o.customer_id = c.customer_id)
+                      LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+                WHERE o.customer_id > 0
+                  AND cgd.language_id = #{language_id}
+             <if test="date_start!=null and date_start!=''">
+               <![CDATA[
+                  AND DATE(o.date_added) >= #{date_start}
+               ]]>
+             </if>
+             <if test="date_end!=null and date_end!=''">
+               <![CDATA[
+                  AND DATE(o.date_added) <= #{date_end}
+               ]]>
+             </if>
+             <if test="customer!=null and customer!=''">
+                  AND c.customer_name = #{customer}
+             </if>
+             <if test="order_status_id==null or order_status_id==''">
+                  AND o.order_status_id > '0'
+             </if>
+             <if test="order_status_id!=null and order_status_id!=''">
+                  AND o.order_status_id = #{order_status_id}
+             </if>
+      	        GROUP BY o.order_id
+      	      ) AS t
+      	GROUP BY t.customer_id
+      	ORDER BY total DESC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalOrder" parameterType="hashmap" resultType="int">
+        SELECT COUNT(DISTINCT o.customer_id) AS total
+          FROM dr_order o LEFT JOIN my_order_product op ON (o.order_id = op.order_id)
+               LEFT JOIN dr_customer c ON (o.customer_id = c.customer_id)
+               LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+         WHERE o.customer_id > 0
+           AND cgd.language_id = #{language_id}
+	  <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <if test="customer!=null and customer!=''">
+           AND c.customer_name = #{customer}
+      </if>
+      <if test="order_status_id==null or order_status_id==''">
+           AND o.order_status_id > '0'
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+           AND o.order_status_id = #{order_status_id}
+      </if>
+    </select>
+    
+    <select id="rewardPoints" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT cr.customer_id,
+               c.customer_name, c.email,
+               cgd.name AS customer_group,
+               c.status,
+               SUM(cr.points) AS points,
+               COUNT(o.order_id) AS orders,
+               SUM(o.total) AS total
+          FROM dr_customer_reward cr LEFT JOIN dr_customer c ON (cr.customer_id = c.customer_id)
+               LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+               LEFT JOIN dr_order o ON (cr.order_id = o.order_id)
+         WHERE cgd.language_id = #{language_id}
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <if test="customer!=null and customer!=''">
+           AND c.customer_name = #{customer}
+      </if>
+		 GROUP BY cr.customer_id
+		 ORDER BY points DESC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalRewardPoints" parameterType="hashmap" resultType="int">
+        SELECT COUNT(DISTINCT cr.customer_id) AS total
+          FROM dr_customer_reward cr LEFT JOIN dr_customer c ON (cr.customer_id = c.customer_id)
+               LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+               LEFT JOIN dr_order o ON (cr.order_id = o.order_id)
+         WHERE cgd.language_id = #{language_id}
+	  <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <if test="customer!=null and customer!=''">
+           AND c.customer_name = #{customer}
+      </if>
+    </select>
+    
+    <select id="donator" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+      <![CDATA[
+        SELECT c.customer_id, c.customer_name, c.email, DATE_FORMAT(o.date_added, '%Y-%m-%d') AS order_date, os.name as order_status, cgd.name AS customer_group, c.status,
+               o.order_id, o.total, ot.value AS shipping_total
+          FROM dr_order o
+               LEFT JOIN dr_customer c ON (o.customer_id = c.customer_id)
+               LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+               LEFT JOIN my_order_total ot ON (o.order_id = ot.order_id and ot.code = 'shipping')
+               LEFT JOIN dr_order_status os ON (os.order_status_id = o.order_status_id AND os.language_id = #{language_id})
+         WHERE o.shippingfee_type ='1'
+           AND o.order_status_id > 0
+           AND o.store_id=1
+      ]]>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <if test="customer!=null and customer!=''">
+           AND c.customer_name = #{customer}
+      </if>
+		 GROUP BY o.order_id
+		 ORDER BY o.date_added
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalDonator" parameterType="hashmap" resultType="int">
+      <![CDATA[
+        SELECT COUNT(DISTINCT o.order_id) AS total
+          FROM dr_order o
+               LEFT JOIN dr_customer c ON (o.customer_id = c.customer_id)
+               LEFT JOIN dr_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id)
+               LEFT JOIN my_order_total ot ON (o.order_id = ot.order_id and ot.code = 'shipping')
+               LEFT JOIN dr_order_status os ON (os.order_status_id = o.order_status_id AND os.language_id = #{language_id})
+         WHERE o.shippingfee_type ='1'
+           AND o.order_status_id > 0
+           AND o.store_id=1
+      ]]>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <if test="customer!=null and customer!=''">
+           AND c.customer_name = #{customer}
+      </if>
+    </select>
+</mapper>

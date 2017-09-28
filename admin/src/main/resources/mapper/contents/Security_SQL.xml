@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="security">
+    <select id="security" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_security
+         WHERE code = #{code}
+           AND language_id = #{language_id}
+    </select>
+    
+    <select id="securityContents" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT *
+          FROM dr_security_contents
+         WHERE language_id = #{language_id}
+           AND code = #{code}
+         <if test="title!=null and title!=''">
+           AND title LIKE concat('%',#{title},'%')
+         </if>
+         ORDER BY title ASC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="securityContentsAll" parameterType="hashmap" resultType="hashmap">
+        SELECT contents_id, title
+          FROM dr_security_contents
+         WHERE language_id = #{language_id}
+           AND code = #{code}
+         <if test="title!=null and title!=''">
+           AND title LIKE concat('%',#{title},'%')
+         </if>
+         ORDER BY title ASC
+    </select>
+    
+    <select id="totalSecurityContents" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_security_contents WHERE code = #{code}
+        <if test="title!=null and title!=''">
+           AND title LIKE concat('%',#{title},'%')
+         </if>
+    </select>
+    
+    <select id="securityInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_security
+         WHERE code = #{code}
+           AND language_id = #{language_id}
+    </select>
+    
+    <select id="securityContentsInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_security_contents
+         WHERE contents_id = #{contents_id}
+           AND language_id = #{language_id}
+           AND code = #{code}
+    </select>
+    
+    <select id="isSecurityContents" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_security_contents
+         WHERE contents_id = #{contents_id}
+           AND language_id = #{language_id}
+           AND code = #{code}
+    </select>
+    
+    <update id="updateSecurity" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_security 
+               SET title = #{title},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   status = #{status},
+                   date_modified = NOW()
+             WHERE code = #{code}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <update id="updateSecurityContents" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_security_contents 
+               SET title = #{title},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   status = #{status},
+                   date_modified = NOW()
+             WHERE contents_id = #{contents_id}
+               AND language_id = #{language_id}
+               AND code = #{code}
+        ]]>
+    </update>
+    
+    <select id="maxSecurityContentsId" parameterType="hashmap" resultType="int">
+        SELECT MAX(contents_id)+1 AS contents_id
+          FROM dr_security_contents
+    </select>
+    
+    <insert id="addSecurityContents" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_security_contents(contents_id, language_id, code, title, image, description, meta_title, meta_description, meta_keyword, status, date_added)
+            VALUES
+            (
+                #{contents_id},
+                #{language_id},
+                #{code},
+                #{title},
+                #{image},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword},
+                #{status},
+                NOW()
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteSecurityContents" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_security_contents 
+             WHERE contents_id = #{contents_id}
+        ]]>
+    </delete>
+    
+    <select id="securityContentsMedicine" parameterType="hashmap" resultType="hashmap">
+        SELECT scm.contents_id, pd.product_id, pd.name
+          FROM dr_security_contents_medicine scm, dr_product_description pd
+         WHERE scm.product_id = pd.product_id
+           AND scm.contents_id = #{contents_id}
+           AND scm.medicine_id = #{medicine_id}
+         ORDER BY pd.name ASC
+    </select>
+    
+    <delete id="deleteSecurityContentsMedicine" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_security_contents_medicine 
+             WHERE contents_id = #{contents_id}
+        ]]>
+    </delete>
+    
+    <insert id="addSecurityContentsMedicine" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_security_contents_medicine(contents_id, medicine_id, product_id, status, date_added)
+            VALUES
+            (
+                #{contents_id},
+                #{medicine_id},
+                #{product_id},
+                1,
+                NOW()
+            )
+        ]]>
+    </insert>
+</mapper>

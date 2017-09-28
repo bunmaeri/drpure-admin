@@ -1,0 +1,37 @@
+.page-header.navbar .page-logo>.logo-image, .page-header.navbar .page-logo>a {
+    margin: 10px 0 0 0;
+}
+.page-header.navbar .page-logo .logo-default {
+    font-size: 21px;
+    color: #FFF;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    vertical-align: middle;
+    text-align:center;
+}
+.text-align-left{text-align:left!important}
+.text-align-center{text-align:center!important}
+.text-align-right{text-align:right!important}
+.scroll-to-top>i {
+    color: #4276A4;
+}
+.scroll-to-top {
+    bottom: 50px;
+}
+.portlet>.portlet-title {
+    min-height: 3px;
+}
+.table-checkable tr>td:first-child, .table-checkable tr>th:first-child {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.black, .black:before {
+	color: #000!important;
+}
+.portlet.light>.portlet-title>.actions .btn-icon-only {
+    height: 35px;
+    width: 60px;
+}
+.portlet>.portlet-title>.actions .btn-icon-only.btn-default {
+    padding: 8px 6px 2px;
+}
