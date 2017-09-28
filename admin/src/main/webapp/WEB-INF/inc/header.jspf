@@ -133,6 +133,9 @@ $('#button-top-query').on('click', function() {
                                                             <a href="/my_contents/security/clinic.dr">임상사례</a>
                                                         </li>
                                                         <li>
+                                                            <a href="/my_contents/security/categories.dr">건강,질병,임상 카테고리</a>
+                                                        </li>
+                                                        <li>
                                                             <a href="/my_contents/books.dr">책</a>
                                                         </li>
                                                         <li>

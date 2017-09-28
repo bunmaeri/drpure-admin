@@ -118,6 +118,11 @@
 	                        <span class="title">임상사례</span>
 	                    </a>
 	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/security/categories.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/security/category/')}">
+	                    <a href="/contents/security/categories.dr" class="nav-link ">
+	                        <span class="title">건강,질병,임상 카테고리</span>
+	                    </a>
+	                </li>
 	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/contents/books.dr')} ${ctag:getContainsActiveMenu(sessionScope.URL, '/contents/book/')}">
 	                    <a href="/contents/books.dr" class="nav-link ">
 	                        <span class="title">책</span>

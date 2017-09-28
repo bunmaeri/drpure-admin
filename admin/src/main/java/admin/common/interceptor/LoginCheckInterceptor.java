@@ -17,9 +17,9 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 		
 		UserIpsController ips = new UserIpsController();
 		String client_ip = CommonUtils.getClientIP(request);
-		System.err.println(client_ip);
+//		System.err.println(client_ip);
 		String reqUrl = request.getRequestURI().toString();
-		System.err.println("-----------------> Url check Interceptor , reqUrl : " +reqUrl );
+//		System.err.println("-----------------> Url check Interceptor , reqUrl : " +reqUrl );
 		if(reqUrl.equals("/denied/access.dr")){
 			return true;
 		}
@@ -28,7 +28,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 				response.sendError(300);
 				return false;
 			} else {
-				System.err.println(client_ip);
+//				System.err.println(client_ip);
 				response.sendRedirect(request.getContextPath()+"/denied/access.dr");
 				return true;
 			}
@@ -36,7 +36,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 		BaseController.setCustomSession(request, reqUrl, Session.URL);
 		String[] urls = reqUrl.split("/");
 		if(urls.length>2) {
-			System.err.println("Session.NAV: /"+urls[1]);
+//			System.err.println("Session.NAV: /"+urls[1]);
 			BaseController.setCustomSession(request, "/"+urls[1], Session.NAV);
 		}
 		

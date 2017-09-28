@@ -19,7 +19,7 @@
 		 GROUP BY cp.category_id
 	  ]]>
     </select>
-    
+   
     <select id="categories" parameterType="hashmap" resultType="hashmap">
       <![CDATA[
         SELECT cp.category_id AS category_id,
