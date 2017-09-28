@@ -102,10 +102,10 @@ $('#button-top-query').on('click', function() {
                                                 <div class="col-md-4">
                                                     <ul class="mega-menu-submenu">
                                                         <li>
-                                                            <a href="/my_categories.dr">제품 카테고리</a>
+                                                            <a href="/my_products.dr">제품 목록</a>
                                                         </li>
                                                         <li>
-                                                            <a href="/my_products.dr">제품 목록</a>
+                                                            <a href="/my_categories.dr">제품 카테고리</a>
                                                         </li>
                                                         <li>
                                                             <a href="/my_products/reference.dr">참조된 제품 찾기</a>
