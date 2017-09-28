@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	<sql id="pagingPre">
+		<![CDATA[
+   			SELECT T2.*
+             FROM (SELECT @RNUM:=@RNUM+1 AS RM,
+                          T1.*
+                    FROM (
+ 		]]>
+ 	</sql>
+ 	
+ 	<sql id="pagingSub">
+ 		<![CDATA[
+			              ) AS T1, (SELECT @RNUM:=0) AS R 
+                   )  AS T2
+             LIMIT #{per_page} OFFSET #{page}
+ 		]]>
+ 	</sql>
+ 	
+ 	<select id="totalCnt">
+ 		<![CDATA[
+            SELECT SQL_CALC_FOUND_ROWS *
+ 		]]>
+ 	</select>
+ 	
+ 	<select id="orderStatus" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_order_status
+         WHERE language_id = #{language_id}
+         ORDER BY name ASC
+    </select>
+    
+ 	<select id="orderStatusName" parameterType="String" resultType="String">
+        SELECT name
+          FROM dr_order_status
+         WHERE order_status_id = #{value}
+    </select>
+    
+    <select id="userIp" parameterType="String" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_user_ip
+         WHERE ip = #{value}
+           AND status = 1
+    </select>
+    
+    <select id="manufacturerAll" resultType="hashmap">
+        SELECT * FROM dr_manufacturer ORDER BY name ASC
+    </select>
+    
+    <select id="zonesPerCountry" parameterType="String" resultType="hashmap">
+        SELECT *
+          FROM dr_zone
+         WHERE country_id = #{value}
+           AND status = 1
+         ORDER BY name ASC
+    </select>
+    
+    <select id="customerGroups" parameterType="String" resultType="hashmap">
+        SELECT *
+          FROM dr_customer_group_description
+         WHERE language_id = #{language_id}
+         ORDER BY cast(reward as unsigned) ASC, customer_group_id ASC
+    </select>
+    
+    <select id="customerJoinPaths" parameterType="String" resultType="hashmap">
+        SELECT * FROM dr_customer_join_path
+         WHERE language_id = #{language_id}
+         ORDER BY sort_order ASC
+    </select>
+    
+    <select id="locationAll" resultType="hashmap">
+        SELECT * FROM dr_location ORDER BY name ASC
+    </select>
+    
+    <select id="weightClassAll" resultType="hashmap">
+        SELECT wc.weight_class_id,
+               wc.value,
+               wcd.title,
+               wcd.unit,
+               wcd.language_id
+          FROM dr_weight_class wc
+               LEFT JOIN dr_weight_class_description wcd ON(wc.weight_class_id=wcd.weight_class_id)
+         ORDER BY wcd.title ASC
+    </select>
+</mapper>

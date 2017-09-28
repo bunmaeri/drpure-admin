@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system_taxrates">
+	<select id="geoZoneList" resultType="hashmap">
+		SELECT geo_zone_id, name, description
+		  FROM dr_geo_zone
+		 ORDER BY geo_zone_id ASC
+    </select>
+    
+    <select id="taxRatesList" parameterType="hashmap" resultType="hashmap">
+		SELECT *
+		  FROM dr_tax_rate
+		 ORDER BY tax_rate_id ASC
+    </select>
+    
+    <update id="updateTaxRates" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_tax_rate 
+               SET geo_zone_id = #{geo_zone_id},
+                   name = #{name},
+                   rate = #{rate},
+                   type = #{type},
+                   date_modified = NOW()
+             WHERE tax_rate_id = #{tax_rate_id}
+        ]]>
+    </update>
+    
+    <insert id="addTaxRates" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_tax_rate(geo_zone_id, name, rate, type, date_added, date_modified)
+            VALUES
+            (
+                #{geo_zone_id},
+                #{name},
+                #{rate},
+                #{type},
+                NOW(),
+                NOW()
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteTaxRates" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_tax_rate 
+             WHERE tax_rate_id = #{tax_rate_id}
+        ]]>
+    </delete>
+</mapper>

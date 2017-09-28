@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_products">
+    <select id="autocompleteProducts" parameterType="hashmap" resultType="hashmap">
+        SELECT p.product_id, pd.name
+          FROM my_product p, my_product_description pd
+         WHERE p.product_id = pd.product_id
+           AND pd.language_id = #{language_id}
+         <if test="name!=null and name!=''">
+           AND name LIKE concat('%',#{name},'%')
+         </if>
+         ORDER BY name ASC
+    </select>
+   
+    <select id="totalProduct" parameterType="hashmap" resultType="int">
+        SELECT COUNT(DISTINCT p.product_id) AS total
+          FROM my_product p LEFT JOIN my_product_description pd ON (p.product_id = pd.product_id)
+               LEFT OUTER JOIN product_quantity pq ON (p.model = pq.model)
+               LEFT JOIN dr_manufacturer m ON (m.manufacturer_id = p.manufacturer_id)
+         WHERE pd.language_id = #{language_id}
+      <if test="name!=null and name!=''">
+           AND pd.name LIKE CONCAT('%',#{name},'%')
+      </if>
+      <if test="model!=null and model!=''">
+           AND p.model LIKE CONCAT('%',#{model},'%')
+      </if>
+      <if test="reward_group_id!=null and reward_group_id!=''">
+           AND p.reward_group_id = #{reward_group_id}
+      </if>
+      <if test="quantity!=null and quantity!=''">
+           AND pq.quantity = #{quantity}
+      </if>
+      <if test="status!=null and status!=''">
+           AND p.status = #{status}
+      </if>
+      <if test="manufacturer_id!=null and manufacturer_id!=''">
+           AND m.manufacturer_id = #{manufacturer_id}
+      </if>
+      <if test="array!=null and array!=''">
+           AND p.product_id IN
+	    <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+        </foreach>
+      </if>
+    </select>
+    
+    <select id="listProduct" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT p.product_id,
+               p.model,
+               p.sku,
+               p.image,
+               p.manufacturer_id,
+               p.price,
+               ROUND(CASE WHEN IFNULL(p.reward_group_id,0)>0 THEN (p.price * p.reward_group_id)
+                          ELSE ROUND((p.price * #{config_default_reward}),0)
+                          END,0) AS points,
+               p.status,
+               p.viewed,
+               p.reward_group_id,
+               pd.name,
+               pq.quantity,
+               m.name AS manufacturer_name
+          FROM my_product p LEFT JOIN my_product_description pd ON (p.product_id = pd.product_id)
+               LEFT OUTER JOIN product_quantity pq ON (p.model = pq.model)
+               LEFT JOIN dr_manufacturer m ON (m.manufacturer_id = p.manufacturer_id)
+         WHERE pd.language_id = #{language_id}
+      <if test="name!=null and name!=''">
+           AND pd.name LIKE CONCAT('%',#{name},'%')
+      </if>
+      <if test="model!=null and model!=''">
+           AND p.model LIKE CONCAT('%',#{model},'%')
+      </if>
+      <if test="reward_group_id!=null and reward_group_id!=''">
+           AND p.reward_group_id = #{reward_group_id}
+      </if>
+      <if test="quantity!=null and quantity!=''">
+           AND pq.quantity = #{quantity}
+      </if>
+      <if test="status!=null and status!=''">
+           AND p.status = #{status}
+      </if>
+      <if test="manufacturer_id!=null and manufacturer_id!=''">
+           AND m.manufacturer_id = #{manufacturer_id}
+      </if>
+      <if test="array!=null and array!=''">
+           AND p.product_id IN
+	    <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+             ${array[index]}
+        </foreach>
+      </if>
+         ORDER BY pd.name ASC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="referenceProducts" parameterType="hashmap" resultType="hashmap">
+		SELECT p.product_id, p.name, p.description, p.language_id
+		  FROM my_product_description p
+		 WHERE p.description LIKE #{product_id}
+		   AND p.language_id = #{language_id}
+		 ORDER BY p.name ASC
+    </select>
+    
+    <select id="referenceProductsInfomation" parameterType="hashmap" resultType="hashmap">
+		SELECT sc.contents_id,
+		       sc.title,
+		       sc.language_id
+		  FROM my_security_contents sc
+		 WHERE sc.code = #{code}
+		   AND sc.description LIKE #{product_id}
+		   AND sc.language_id = #{language_id}
+		 ORDER BY sc.title
+    </select>
+    
+    <select id="referenceProductsMedicine" parameterType="hashmap" resultType="hashmap">
+		SELECT sc.contents_id,
+		       sc.title,
+		       scm.medicine_id,
+		       sc.language_id
+		  FROM my_security_contents sc, my_security_contents_medicine scm
+		 WHERE sc.contents_id = scm.contents_id
+		   AND scm.product_id = #{product_id}
+		   AND scm.medicine_id IN(2,3)
+		   AND sc.language_id = #{language_id}
+		 ORDER BY sc.title
+    </select>
+</mapper>

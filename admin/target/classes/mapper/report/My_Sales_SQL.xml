@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_reportSales">
+    <select id="salesOrder" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT DATE_FORMAT(MIN(o.date_added),'%Y-%m-%d') AS date_start,
+               DATE_FORMAT(MAX(o.date_added),'%Y-%m-%d') AS date_end,
+               COUNT(*) AS `orders`,
+               IFNULL(SUM(op.quantity),0) AS products,
+               IFNULL(SUM(ot.value),0) AS tax,
+               IFNULL(SUM(o.total),0) AS `total`
+          FROM my_order_product op, dr_order o LEFT OUTER JOIN my_order_total ot ON o.order_id = ot.order_id AND ot.code = 'tax'
+         WHERE o.order_id = op.order_id
+           AND o.store_id=1
+      <if test="order_status_id==null or order_status_id==''">
+           AND o.order_status_id > '0'
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+           AND o.order_status_id = #{order_status_id}
+      </if>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <choose>
+      <when test="group_by=='day'">
+         GROUP BY YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added)
+      </when>
+      <when test="group_by=='week'">
+         GROUP BY YEAR(o.date_added), WEEK(o.date_added)
+      </when>
+      <when test="group_by=='month'">
+         GROUP BY YEAR(o.date_added), MONTH(o.date_added)
+      </when>
+      <otherwise>
+         GROUP BY YEAR(o.date_added)
+      </otherwise>
+      </choose>
+		 ORDER BY o.date_added DESC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalSalesOrder" parameterType="hashmap" resultType="int">
+      <choose>
+      <when test="group_by=='day'">
+        SELECT COUNT(DISTINCT YEAR(date_added), MONTH(date_added), DAY(date_added)) AS total FROM dr_order o
+      </when>
+      <when test="group_by=='week'">
+        SELECT COUNT(DISTINCT YEAR(date_added), WEEK(date_added)) AS total FROM dr_order o
+      </when>
+      <when test="group_by=='month'">
+        SELECT COUNT(DISTINCT YEAR(date_added), MONTH(date_added)) AS total FROM dr_order o
+      </when>
+      <otherwise>
+        SELECT COUNT(DISTINCT YEAR(date_added)) AS total FROM dr_order o
+      </otherwise>
+      </choose>
+	  <if test="order_status_id==null or order_status_id==''">
+         WHERE o.order_status_id > '0'
+           AND o.store_id=1
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+         WHERE o.order_status_id = #{order_status_id}
+           AND o.store_id=1
+      </if>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+    </select>
+    
+    <select id="salesTax" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT DATE_FORMAT(MIN(o.date_added),'%Y-%m-%d') AS date_start,
+               DATE_FORMAT(MAX(o.date_added),'%Y-%m-%d') AS date_end,
+               ot.title,
+               IFNULL(SUM(ot.value),0) AS total,
+               COUNT(o.order_id) AS `orders`
+          FROM dr_order o LEFT JOIN my_order_total ot ON (ot.order_id = o.order_id)
+         WHERE ot.code = 'tax'
+           AND o.store_id=1
+      <if test="order_status_id==null or order_status_id==''">
+           AND o.order_status_id > '0'
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+           AND o.order_status_id = #{order_status_id}
+      </if>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <choose>
+      <when test="group_by=='day'">
+         GROUP BY YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title
+      </when>
+      <when test="group_by=='week'">
+         GROUP BY YEAR(o.date_added), WEEK(o.date_added), ot.title
+      </when>
+      <when test="group_by=='month'">
+         GROUP BY YEAR(o.date_added), MONTH(o.date_added), ot.title
+      </when>
+      <otherwise>
+         GROUP BY YEAR(o.date_added), ot.title
+      </otherwise>
+      </choose>
+		 ORDER BY o.date_added DESC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalSalesTax" parameterType="hashmap" resultType="int">
+      <choose>
+      <when test="group_by=='day'">
+        SELECT COUNT(DISTINCT YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title) AS total
+      </when>
+      <when test="group_by=='week'">
+        SELECT COUNT(DISTINCT YEAR(o.date_added), WEEK(o.date_added), ot.title) AS total
+      </when>
+      <when test="group_by=='month'">
+        SELECT COUNT(DISTINCT YEAR(o.date_added), MONTH(o.date_added), ot.title) AS total
+      </when>
+      <otherwise>
+        SELECT COUNT(DISTINCT YEAR(o.date_added), ot.title) AS total
+      </otherwise>
+      </choose>
+          FROM dr_order o LEFT JOIN my_order_total ot ON (o.order_id = ot.order_id) WHERE ot.code = 'tax' AND o.store_id=1
+	  <if test="order_status_id==null or order_status_id==''">
+           AND o.order_status_id > '0'
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+           AND o.order_status_id = #{order_status_id}
+      </if>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+    </select>
+    
+    <select id="salesShipping" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT DATE_FORMAT(MIN(o.date_added),'%Y-%m-%d') AS date_start,
+               DATE_FORMAT(MAX(o.date_added),'%Y-%m-%d') AS date_end,
+               ot.title,
+               IFNULL(SUM(ot.value),0) AS total,
+               COUNT(o.order_id) AS `orders`
+          FROM dr_order o LEFT JOIN my_order_total ot ON (ot.order_id = o.order_id)
+         WHERE ot.code = 'shipping'
+           AND o.store_id=1
+      <if test="order_status_id==null or order_status_id==''">
+           AND o.order_status_id > '0'
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+           AND o.order_status_id = #{order_status_id}
+      </if>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+      <choose>
+      <when test="group_by=='day'">
+         GROUP BY YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title
+      </when>
+      <when test="group_by=='week'">
+         GROUP BY YEAR(o.date_added), WEEK(o.date_added), ot.title
+      </when>
+      <when test="group_by=='month'">
+         GROUP BY YEAR(o.date_added), MONTH(o.date_added), ot.title
+      </when>
+      <otherwise>
+         GROUP BY YEAR(o.date_added), ot.title
+      </otherwise>
+      </choose>
+		 ORDER BY o.date_added DESC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalSalesShipping" parameterType="hashmap" resultType="int">
+      <choose>
+      <when test="group_by=='day'">
+        SELECT COUNT(DISTINCT YEAR(o.date_added), MONTH(o.date_added), DAY(o.date_added), ot.title) AS total
+      </when>
+      <when test="group_by=='week'">
+        SELECT COUNT(DISTINCT YEAR(o.date_added), WEEK(o.date_added), ot.title) AS total
+      </when>
+      <when test="group_by=='month'">
+        SELECT COUNT(DISTINCT YEAR(o.date_added), MONTH(o.date_added), ot.title) AS total
+      </when>
+      <otherwise>
+        SELECT COUNT(DISTINCT YEAR(o.date_added), ot.title) AS total
+      </otherwise>
+      </choose>
+          FROM dr_order o LEFT JOIN my_order_total ot ON (o.order_id = ot.order_id) WHERE ot.code = 'shipping' AND o.store_id=1
+	  <if test="order_status_id==null or order_status_id==''">
+           AND o.order_status_id > '0'
+      </if>
+      <if test="order_status_id!=null and order_status_id!=''">
+           AND o.order_status_id = #{order_status_id}
+      </if>
+      <if test="date_start!=null and date_start!=''">
+        <![CDATA[
+           AND DATE(o.date_added) >= #{date_start}
+        ]]>
+      </if>
+      <if test="date_end!=null and date_end!=''">
+        <![CDATA[
+           AND DATE(o.date_added) <= #{date_end}
+        ]]>
+      </if>
+    </select>
+</mapper>

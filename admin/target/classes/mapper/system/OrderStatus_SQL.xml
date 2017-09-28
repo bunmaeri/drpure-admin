@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system_orderstatus">
+<select id="orderStatusList" parameterType="hashmap" resultType="hashmap">
+		SELECT *
+		  FROM dr_order_status
+		 ORDER BY sort_order ASC
+    </select>
+    
+    <update id="updateOrderStatus" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_order_status 
+               SET name = #{name},
+                   sort_order = #{sort_order}
+             WHERE order_status_id = #{order_status_id}
+        ]]>
+    </update>
+    
+    <insert id="addOrderStatus" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_order_status(language_id, name, sort_order)
+            VALUES
+            (
+                #{language_id},
+                #{name},
+                #{sort_order}
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteOrderStatus" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_order_status 
+             WHERE order_status_id = #{order_status_id}
+        ]]>
+    </delete>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="excel">
+    <select id="getExportOrders" parameterType="hashmap" resultType="hashmap">
+        SELECT o.order_id,
+		       o.customer_name,
+		       o.firstname,
+		       o.lastname,
+		       o.email,
+		       o.telephone,
+		       o.payment_customer_name,
+		       o.payment_firstname,
+		       o.payment_lastname,
+		       o.payment_company,
+		       o.payment_address_1,
+		       o.payment_address_2,
+		       o.payment_city,
+		       o.payment_postcode,
+		       o.payment_country,
+		       o.payment_country_id,
+		       o.payment_zone,
+		       o.payment_zone_id,
+		       o.shipping_customer_name,
+		       o.shipping_firstname,
+		       o.shipping_lastname,
+		       o.shipping_company,
+		       o.shipping_address_1,
+		       o.shipping_address_2,
+		       o.shipping_city,
+		       o.shipping_postcode,
+		       o.shipping_country,
+		       o.shipping_country_id,
+		       o.shipping_zone,
+		       o.shipping_zone_id,
+		       o.shipping_telephone,
+		       o.requisition_id,
+		       o.payment_method,
+		       o.shipping_method,
+		       DATE_FORMAT(o.date_added, "%Y-%m-%d") AS order_date,
+		       o.comment,
+		       p.product_id,
+			   pd.name,
+			   p.ean,
+			   p.jan,
+			   p.mpn,
+			   p.icebox,
+			   p.model,
+			   m.name AS manufacturer_name,
+			   ROUND(p.price,2) AS price,
+			   op.quantity,
+		       ROUND(op.total,2) AS total,
+		       IFNULL((SELECT ptc.category_id FROM ${table_prefix}_product_to_category ptc WHERE p.product_id=ptc.product_id AND ptc.category_id=91),'') AS category_id
+		  FROM dr_order o
+		       LEFT JOIN ${table_prefix}_order_product op ON (o.order_id=op.order_id)
+		       LEFT JOIN ${table_prefix}_product p ON (op.product_id=p.product_id)
+		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
+		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
+		 WHERE o.order_status_id = #{order_status_id}
+		   AND o.shipping_country_id = #{shipping_country_id}
+		   AND o.store_id = #{store_id}
+		 ORDER BY o.order_id ASC, op.order_product_id ASC
+    </select>
+</mapper>

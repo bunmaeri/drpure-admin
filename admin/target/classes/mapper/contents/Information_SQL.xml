@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contentsInformation">
+    <select id="information" parameterType="hashmap" resultType="hashmap">
+    <include refid="common.pagingPre"/>
+        SELECT *
+          FROM dr_information i
+         WHERE i.language_id = #{language_id}
+         ORDER BY i.title ASC
+    <include refid="common.pagingSub"/> 
+    </select>
+    
+    <select id="totalInformation" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_information
+    </select>
+    
+    <select id="informationInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_information i
+         WHERE i.information_id = #{information_id}
+           AND i.language_id = #{language_id}
+    </select>
+    
+    <select id="isInformation" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_information i
+         WHERE i.information_id = #{information_id}
+           AND i.language_id = #{language_id}
+    </select>
+    
+    <update id="updateInformation" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_information 
+               SET title = #{title},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   sort_order = #{sort_order},
+                   status = #{status}
+             WHERE information_id = #{information_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <select id="maxInformationId" parameterType="hashmap" resultType="int">
+        SELECT MAX(information_id)+1 AS information_id
+          FROM dr_information i
+    </select>
+    
+    <insert id="addInformation" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_information(information_id, language_id, title, description, meta_title, meta_description, meta_keyword, sort_order, status)
+            VALUES
+            (
+                #{information_id},
+                #{language_id},
+                #{title},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword},
+                #{sort_order},
+                #{status}
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteInformation" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_information 
+             WHERE information_id = #{information_id}
+        ]]>
+    </delete>
+    
+    <update id="updateImage" parameterType="hashmap">
+        UPDATE dr_information 
+           SET image = #{image}
+         WHERE information_id = #{information_id}
+    </update>
+</mapper>

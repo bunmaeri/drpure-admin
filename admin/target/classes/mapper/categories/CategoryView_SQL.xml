@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="categoryView">
+    <select id="categoryMeta" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+        SELECT c1.category_id,
+               c1.image,
+		       GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS path_name,
+		       c1.parent_id,
+		       c2.status,
+		       cd2.name,
+		       cd2.description,
+		       cd2.meta_title,
+		       cd2.meta_description,
+		       cd2.meta_keyword
+		  FROM dr_category_path cp LEFT JOIN dr_category c1 ON (cp.category_id = c1.category_id)
+		       LEFT JOIN dr_category c2 ON (cp.path_id = c2.category_id)
+		       LEFT JOIN dr_category_description cd1 ON (cp.path_id = cd1.category_id)
+		       LEFT JOIN dr_category_description cd2 ON (cp.category_id = cd2.category_id)
+		 WHERE cd1.language_id = #{language_id}
+		   AND cd2.language_id = #{language_id}
+		   AND c1.category_id = #{category_id}
+      ]]>
+    </select>
+    
+    <update id="updateCategoryMeta" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_category_description 
+               SET name = #{name},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword}
+             WHERE category_id = #{category_id}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <update id="updateCategoryParent" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_category
+               SET parent_id = #{parent_id}
+             WHERE category_id = #{category_id}
+        ]]>
+    </update>
+    
+    <update id="deleteCategoryPaths" parameterType="hashmap">
+      <![CDATA[
+        DELETE FROM dr_category_path WHERE category_id = #{category_id}
+      ]]>
+    </update>
+    
+    <select id="categoryPaths" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+        SELECT * FROM dr_category_path WHERE category_id = #{category_id} ORDER BY `level` ASC
+      ]]>
+    </select>
+    
+    <insert id="addCategoryPath" parameterType="hashmap">
+        INSERT INTO dr_category_path(category_id, path_id, level)
+        VALUES
+            (  #{category_id},
+               #{path_id},
+               #{level}
+            )
+    </insert>
+    
+    <insert id="newCategory" parameterType="hashmap">
+        INSERT INTO dr_category(category_id, image, parent_id, top, column, sort_order, status, date_added, date_modified)
+        VALUES
+            (  #{category_id},
+               #{image},
+               #{parent_id},
+               #{top},
+               #{column},
+               #{sort_order},
+               #{status},
+               now(),
+               now()
+            )
+    </insert>
+    
+    <insert id="addCategoryMeta" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_category_description(category_id, language_id, name, description, meta_title, meta_description, meta_keyword)
+            VALUES
+            (
+                #{category_id},
+                #{language_id},
+                #{name},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword}
+            )
+        ]]>
+    </insert>
+    
+    <select id="maxCategoryId" resultType="int">
+        SELECT MAX(category_id) + 1 AS category_id
+          FROM dr_category
+    </select>
+    
+    <update id="updateImage" parameterType="hashmap">
+        UPDATE dr_category 
+           SET image = #{image},
+               date_modified = now()
+         WHERE category_id = #{category_id}
+    </update>
+
+</mapper>

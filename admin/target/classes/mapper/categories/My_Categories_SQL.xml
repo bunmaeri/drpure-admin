@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my_categories">
+    <select id="autocompleteCategories" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+        SELECT cp.category_id AS category_id,
+		       GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS name,
+		       c1.parent_id,
+		       c1.sort_order 
+		  FROM my_category_path cp LEFT JOIN my_category c1 ON (cp.category_id = c1.category_id)
+		       LEFT JOIN my_category c2 ON (cp.path_id = c2.category_id)
+		       LEFT JOIN my_category_description cd1 ON (cp.path_id = cd1.category_id)
+		       LEFT JOIN my_category_description cd2 ON (cp.category_id = cd2.category_id)
+		 WHERE cd1.language_id = 4
+		   AND cd2.language_id = 4
+		   AND c1.status = 1
+		   AND c2.status = 1
+		 GROUP BY cp.category_id
+	  ]]>
+    </select>
+    
+    <select id="categories" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+        SELECT cp.category_id AS category_id,
+               c1.image,
+		       cd2.name,
+		       GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') AS path_name,
+		       c1.parent_id,
+		       c1.top,
+		       c1.sort_order,
+		       c2.status
+		  FROM my_category_path cp LEFT JOIN my_category c1 ON (cp.category_id = c1.category_id)
+		       LEFT JOIN my_category c2 ON (cp.path_id = c2.category_id)
+		       LEFT JOIN my_category_description cd1 ON (cp.path_id = cd1.category_id)
+		       LEFT JOIN my_category_description cd2 ON (cp.category_id = cd2.category_id)
+		 WHERE cd1.language_id = #{language_id}
+		   AND cd2.language_id = #{language_id}
+		 GROUP BY cp.category_id
+		 ORDER BY path_name, sort_order
+	  ]]>
+	</select>
+	
+	<!-- <select id="categories" parameterType="hashmap" resultType="hashmap">
+        SELECT cp.category_id AS category_id,
+		       GROUP_CONCAT(cd1.name ORDER BY cp.level SEPARATOR '||') AS name,
+		       cd2.name as name2,
+		       c1.parent_id,
+		       c1.sort_order
+		  FROM my_category_path cp LEFT JOIN my_category c1 ON (cp.category_id = c1.category_id)
+		       LEFT JOIN my_category c2 ON (cp.path_id = c2.category_id)
+		       LEFT JOIN my_category_description cd1 ON (cp.path_id = cd1.category_id)
+		       LEFT JOIN my_category_description cd2 ON (cp.category_id = cd2.category_id)
+		 WHERE cd1.language_id = #{language_id}
+		   AND cd2.language_id = #{language_id}
+		   AND c1.status = 1
+		   AND c2.status = 1
+		 GROUP BY cp.category_id
+		 ORDER BY c1.sort_order
+    </select> -->
+    
+    <select id="securityCategories" parameterType="String" resultType="hashmap">
+        SELECT sc.*
+		  FROM my_security_contents sc
+		 WHERE sc.code = #{value}
+		 ORDER BY sc.title
+    </select>
+    
+</mapper>

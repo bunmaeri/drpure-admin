@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="index">
+    <select id="totalOrders" parameterType="hashmap" resultType="String">
+        SELECT COUNT(*) AS total
+          FROM dr_order
+         WHERE order_status_id > '0'
+    </select>
+    
+    <select id="sumOrder" parameterType="hashmap" resultType="String">
+        SELECT COUNT(*) AS total
+          FROM dr_order
+         WHERE order_status_id > '0'
+           AND DATE(date_added) BETWEEN DATE(#{from_date}) AND DATE(#{to_date})
+    </select>
+    
+    <select id="totalSales" parameterType="hashmap" resultType="String">
+        SELECT SUM(total) AS total
+          FROM dr_order
+         WHERE order_status_id > '0'
+    </select>
+    
+    <select id="sumSale" parameterType="hashmap" resultType="String">
+        SELECT SUM(total) AS total
+          FROM dr_order
+         WHERE order_status_id > '0'
+           AND DATE(date_added) BETWEEN DATE(#{from_date}) AND DATE(#{to_date})
+    </select>
+    
+    <select id="totalCustomers" parameterType="hashmap" resultType="String">
+        SELECT COUNT(*) AS total
+          FROM dr_customer
+    </select>
+    
+    <select id="sumCustomer" parameterType="hashmap" resultType="String">
+        SELECT COUNT(*) AS total
+          FROM dr_customer
+         WHERE DATE(date_added) BETWEEN DATE(#{from_date}) AND DATE(#{to_date})
+    </select>
+    
+    <select id="mapInfo" resultType="hashmap">
+	    SELECT COUNT(*) AS total, SUM(o.total) AS amount, c.iso_code_2
+	      FROM dr_order o LEFT JOIN dr_country c ON (o.payment_country_id = c.country_id)
+	     WHERE o.order_status_id > '0'
+	     GROUP BY o.payment_country_id
+    </select>
+    
+    <select id="joinPathInfo" resultType="hashmap">
+	    SELECT cjp.join_path_name,
+	           COUNT(c.customer_id) AS cnt
+	      FROM dr_customer_join_path cjp LEFT OUTER JOIN dr_customer c ON c.join_path_id = cjp.join_path_id
+	       AND c.join_path_id is not null
+	     GROUP BY cjp.join_path_name
+	     ORDER BY cjp.sort_order
+    </select>
+    
+    <select id="recentOrders" parameterType="hashmap" resultType="hashmap">
+	    SELECT o.order_id, c.customer_name,
+              (SELECT os.name FROM dr_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = #{language_id}) AS order_status,
+               o.total, DATE_FORMAT(o.date_added,'%Y-%m-%d') AS date_added, o.store_id
+          FROM dr_order o LEFT join dr_customer AS c on c.customer_id = o.customer_id
+         WHERE o.order_status_id > 0
+         ORDER BY o.date_added DESC
+         LIMIT 0, #{to}
+    </select>
+    
+    <select id="dailyOrderTotal" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+	    SELECT COUNT(o.order_id) AS cnt,
+		       DATE_FORMAT(c.db_date,'%m-%d') AS date_added,
+		       c.day_name_kor
+		  FROM calender c LEFT OUTER JOIN dr_order o ON (DATE_FORMAT(o.date_added,'%Y-%m-%d') = c.db_date)
+		   AND o.order_status_id > 0
+		 WHERE c.db_date >= #{from_date}
+		   AND c.db_date <= NOW()
+		 GROUP BY DATE_FORMAT(c.db_date,'%m-%d')
+		 ORDER BY c.db_date
+	  ]]>
+    </select>
+    
+    <select id="dailyOrderStoreTotal" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+	    SELECT COUNT(o.order_id) AS cnt,
+		       DATE_FORMAT(c.db_date,'%m-%d') AS date_added
+		  FROM calender c LEFT OUTER JOIN dr_order o ON (DATE_FORMAT(o.date_added,'%Y-%m-%d') = c.db_date)
+		   AND o.order_status_id > 0
+		   AND o.store_id = #{store_id}
+		 WHERE c.db_date >= #{from_date}
+		   AND c.db_date <= NOW()
+		 GROUP BY DATE_FORMAT(c.db_date,'%m-%d')
+		 ORDER BY c.db_date
+	  ]]>
+    </select>
+    
+    <select id="dailyOrderCountryTotal" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+	    SELECT COUNT(o.order_id) AS cnt,
+		       DATE_FORMAT(c.db_date,'%m-%d') AS date_added,
+		       o.shipping_country_id,
+		       c.day_name_kor
+		  FROM calender c LEFT OUTER JOIN dr_order o ON (DATE_FORMAT(o.date_added,'%Y-%m-%d') = c.db_date)
+		   AND o.order_status_id > 0
+		   AND o.shipping_country_id=#{shipping_country_id}
+		 WHERE c.db_date >= #{from_date}
+		   AND c.db_date <= NOW()
+		 GROUP BY DATE_FORMAT(c.db_date,'%m-%d'), o.shipping_country_id, c.day_name_kor
+		 ORDER BY c.db_date
+	  ]]>
+    </select>
+</mapper>

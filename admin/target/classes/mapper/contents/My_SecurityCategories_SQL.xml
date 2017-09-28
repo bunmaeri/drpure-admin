@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="my_securityCategories">
+    <select id="securityCategories" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_security
+         WHERE language_id = #{language_id}
+         ORDER BY title ASC
+    </select>
+    
+    <select id="totalSecurityCategories" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_security
+    </select>
+    
+    <select id="securityCategoryInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT *
+          FROM dr_security
+         WHERE code = #{code}
+           AND language_id = #{language_id}
+    </select>
+    
+    <select id="isSecurityCategory" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total
+          FROM dr_security
+         WHERE code = #{code}
+           AND language_id = #{language_id}
+    </select>
+    
+    <update id="updateSecurityCategory" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_security 
+               SET title = #{title},
+                   description = #{description},
+                   meta_title = #{meta_title},
+                   meta_description = #{meta_description},
+                   meta_keyword = #{meta_keyword},
+                   status = #{status},
+                   date_modified = NOW()
+             WHERE code = #{code}
+               AND language_id = #{language_id}
+        ]]>
+    </update>
+    
+    <insert id="addSecurityCategory" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_security(code, language_id, title, description, meta_title, meta_description, meta_keyword, status, date_added, date_modified)
+            VALUES
+            (
+                #{code},
+                #{language_id},
+                #{title},
+                #{description},
+                #{meta_title},
+                #{meta_description},
+                #{meta_keyword},
+                #{status},
+                NOW(),
+                NOW()
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteSecurityCategory" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_security 
+             WHERE code = #{code}
+        ]]>
+    </delete>
+    
+    <update id="updateImage" parameterType="hashmap">
+        UPDATE dr_security 
+           SET image = #{image},
+               date_modified = NOW()
+         WHERE code = #{code}
+    </update>
+</mapper>
