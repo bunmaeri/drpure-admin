@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="template">
+    <select id="totalEmailTemplate" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_email_template
+    </select>
+    
+    <select id="emailTemplateList" parameterType="hashmap" resultType="hashmap">
+      <include refid="common.pagingPre"/>
+        SELECT template_id,
+               alias,
+               title,
+               description,
+               DATE_FORMAT(date_added, "%Y-%m-%d %r") AS date_added,
+               DATE_FORMAT(date_modified, "%Y-%m-%d %r") AS date_modified,
+               DATE_FORMAT(send_date, "%Y-%m-%d %r") AS send_date,
+               send_count
+          FROM dr_email_template
+         ORDER BY send_date DESC, date_modified DESC
+      <include refid="common.pagingSub"/> 
+    </select>
+  
+    <select id="emailTemplateInfo" parameterType="hashmap" resultType="hashmap">
+        SELECT template_id,
+               alias,
+               title,
+               description,
+               DATE_FORMAT(date_added, "%Y-%m-%d %r") AS date_added,
+               DATE_FORMAT(date_modified, "%Y-%m-%d %r") AS date_modified,
+               DATE_FORMAT(send_date, "%Y-%m-%d %r") AS send_date,
+               send_count
+          FROM dr_email_template
+         WHERE template_id = #{template_id}
+    </select>
+    
+    <update id="updateEmailTemplate" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_email_template 
+               SET alias = #{alias},
+                   title = #{title},
+                   description = #{description},
+                   date_modified = NOW()
+             WHERE template_id = #{template_id}
+        ]]>
+    </update>
+    
+    <insert id="addEmailTemplate" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_email_template(alias, title, description, date_added, date_modified, send_count)
+            VALUES
+            (
+                #{alias},
+                #{title},
+                #{description},
+                NOW(),
+                NOW(),
+                0
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteEmailTemplate" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_email_template 
+             WHERE template_id = #{template_id}
+        ]]>
+    </delete>
+    
+    <update id="updateEmailTemplateUse" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_email_template 
+               SET send_date = NOW(),
+                   send_count = send_count+1
+             WHERE template_id = #{template_id}
+        ]]>
+    </update>
+</mapper>

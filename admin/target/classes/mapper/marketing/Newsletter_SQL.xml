@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="newsletter">
+    <select id="totalEmailTemplate" parameterType="hashmap" resultType="int">
+        SELECT COUNT(*) AS total FROM dr_email_template
+    </select>
+    
+    <select id="emailTemplateList" resultType="hashmap">
+        SELECT template_id,
+               alias,
+               title,
+               description,
+               DATE_FORMAT(date_added, "%Y-%m-%d %r") AS date_added,
+               DATE_FORMAT(date_modified, "%Y-%m-%d %r") AS date_modified,
+               DATE_FORMAT(send_date, "%Y-%m-%d %r") AS send_date,
+               send_count
+          FROM dr_email_template
+         ORDER BY send_date DESC, date_modified DESC
+    </select>
+  
+    <select id="newsletterCustomerList" resultType="hashmap">
+        SELECT COUNT(*) AS total,
+		       c.customer_group_id,
+		       cgd.name
+		  FROM dr_customer c, dr_customer_group_description cgd
+		 WHERE c.customer_group_id = cgd.customer_group_id
+		   AND c.email IS NOT NULL
+		   AND c.status = 1
+		   AND c.newsletter = 1
+		 GROUP BY c.customer_group_id, cgd.name
+    </select>
+    
+    <select id="sendCustomerList" parameterType="hashmap" resultType="hashmap">
+        SELECT email,
+               customer_name
+		  FROM dr_customer
+	  <if test="customer_group_id!=null and customer_group_id!=''">
+		 WHERE customer_group_id = #{customer_group_id}
+	  </if>
+		 GROUP BY email
+    </select>
+</mapper>

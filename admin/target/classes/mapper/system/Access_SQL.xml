@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system_access">
+	<select id="accessIpList" resultType="hashmap">
+		SELECT no, ip, memo, status, date_added
+		  FROM dr_user_ip
+		 ORDER BY ip ASC
+    </select>
+    
+    <insert id="addAccessIp" parameterType="hashmap">
+        <![CDATA[
+            INSERT INTO dr_user_ip(ip, memo, status, date_added)
+            VALUES
+            (
+                #{ip},
+                #{memo},
+                #{status},
+                NOW()
+            )
+        ]]>
+    </insert>
+    
+    <delete id="deleteAccessIp" parameterType="hashmap">
+        <![CDATA[
+            DELETE FROM dr_user_ip 
+             WHERE no = #{no}
+        ]]>
+    </delete>
+    
+    <select id="accessIpPassword" resultType="String">
+		SELECT password
+		  FROM dr_user_ip_password
+    </select>
+    
+    <update id="updateAccessPassword" parameterType="hashmap">
+        <![CDATA[
+            UPDATE dr_user_ip_password 
+               SET password = #{password},
+                   date_added = NOW()
+        ]]>
+    </update>
+</mapper>
