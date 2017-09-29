@@ -132,6 +132,9 @@ Logger log = Logger.getLogger(this.getClass());
 			
 			// 수량이 0보다 작으면 0으로 맞춘다.
 			ordersDAO.updateProductQuantityToZero(map);
+		} else {
+			map.put("stock_status_id", 7); // 재고 있음
+			ordersDAO.updateProductStockStatus(map);
 		}
 	}
 	

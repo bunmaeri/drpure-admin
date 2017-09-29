@@ -71,6 +71,14 @@ public class MetaUtils {
 		mv.addObject("META_TITLE", "컨텐츠 관리 > 기타 컨텐츠");
 	}
 	
+	public static void marketingTemplets(ModelAndView mv) {
+		mv.addObject("META_TITLE", "이메일 마케팅 > 템플릿 관리");
+	}
+	
+	public static void marketingNewsletter(ModelAndView mv) {
+		mv.addObject("META_TITLE", "이메일 마케팅 > 이메일 보내기");
+	}
+	
 	public static void settingsLanguage(ModelAndView mv) {
 		mv.addObject("META_TITLE", "Settings > Language");
 	}

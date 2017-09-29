@@ -124,6 +124,7 @@
                icebox = #{icebox},
                mpn = #{mpn},
                location = #{location},
+               stock_status_id = #{stock_status_id},
                manufacturer_id = #{manufacturer_id},
                price = #{price},
                tax_class_id = #{tax_class_id},
@@ -141,7 +142,7 @@
     
     <insert id="addProduct" parameterType="hashmap">
         <![CDATA[
-            INSERT INTO my_product(model, sku, upc, ean, jan, icebox, mpn, location, manufacturer_id, price, tax_class_id, date_available, weight, weight_class_id, minimum, status, reward_group_id, date_added)
+            INSERT INTO my_product(model, sku, upc, ean, jan, icebox, mpn, location, stock_status_id, manufacturer_id, price, tax_class_id, date_available, weight, weight_class_id, minimum, status, reward_group_id, date_added)
             VALUES
             ( 
                #{model},
@@ -152,6 +153,7 @@
                #{icebox},
                #{mpn},
                #{location},
+               #{stock_status_id},
                #{manufacturer_id},
                #{price},
                #{tax_class_id},
@@ -172,6 +174,14 @@
                SET quantity = #{quantity},
                    date_modified = now()
              WHERE model = #{model}
+        ]]>
+    </update>
+    
+    <update id="updateProductStockStatus" parameterType="hashmap">
+        <![CDATA[
+            UPDATE my_product 
+               SET stock_status_id = #{stock_status_id}
+             WHERE product_id = #{product_id}
         ]]>
     </update>
     

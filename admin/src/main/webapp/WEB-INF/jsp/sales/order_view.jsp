@@ -397,7 +397,7 @@
                                                     <c:forEach items="${products}" var="product">
                                                         <tr>
                                                             <td class="text-align-left">
-                                                                <a href="/product/view/${product.product_id}.dr"> ${product.name} </a>
+                                                                <a href="/product/view/info/${product.product_id}/1.dr" target="_blank"> ${product.name} </a>
                                                             </td>
                                                             <td> ${product.manufacturer_name} </td>
                                                             <td> ${product.model} </td>

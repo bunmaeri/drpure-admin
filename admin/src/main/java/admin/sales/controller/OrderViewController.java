@@ -146,6 +146,7 @@ public class OrderViewController {
     			 */
     			if(null!=orderProductMap) {
 	    			orderProductMap.put("plusOrMinus", "+");
+	    			orderProductMap.put("table_prefix", StoreUtils.getTablePrefix(store_id));
 	    			ordersService.updateProductQuantity(orderProductMap);
     			}
     		}
@@ -164,6 +165,7 @@ public class OrderViewController {
     			 */
     			if(null!=orderProductMap) {
 	    			orderProductMap.put("plusOrMinus", "-");
+	    			orderProductMap.put("table_prefix", StoreUtils.getTablePrefix(store_id));
 	    			ordersService.updateProductQuantity(orderProductMap);
     			}
     		}

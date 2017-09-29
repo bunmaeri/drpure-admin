@@ -19,11 +19,21 @@ public class UserIpsController {
 	@Autowired
 	private CodeService codeService;
 
+	public CodeService getCodeService() {
+		return codeService;
+	}
+
+	public void setCodeService(CodeService codeService) {
+		this.codeService = codeService;
+	}
+
 	public UserIpsController() {}
 
 	@PostConstruct
 	public void setCodeList() throws Exception {  
 		CODE_MAP = new HashMap<>();
+		if(null==codeService) codeService = getCodeService();
+		
 		List<Map<String, Object>> CODE_LIST = codeService.getUserIps();
 		if(CODE_LIST != null && CODE_LIST.size() > 0){
 			for(Map<String,Object> map : CODE_LIST){
@@ -45,6 +55,36 @@ public class UserIpsController {
 		} else {
 			this.setCodeList();
 			if(CODE_MAP.containsKey(key)){
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	/**
+	* Key에 의한 Value 추가하기
+	* @param key
+	* @return
+	*/
+	public boolean addCode(String key) throws Exception {
+		if(CODE_MAP!= null){
+			CODE_MAP.put(key, key);
+			return true;
+		}
+
+		return false;
+	}
+	
+	/**
+	* Key에 의한 Value 삭제하기
+	* @param key
+	* @return
+	*/
+	public boolean deleteCode(String key) throws Exception {
+		if(CODE_MAP!= null){
+			if(CODE_MAP.containsKey(key)){
+				CODE_MAP.remove(key);
 				return true;
 			}
 		}

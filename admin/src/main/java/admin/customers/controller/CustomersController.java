@@ -176,12 +176,12 @@ public class CustomersController {
     		mv.addObject("successMsg", BaseController.getCustomSession(request, Session.CUSTOMERS_SUCCESS));
     		BaseController.setCustomSession(request, null, Session.CUSTOMERS_SUCCESS);
     	}
-    	
+    
     	ScriptUtils.customerViewScript(mv);
    
     	return mv;
     }
-	
+
 	/**
 	 * 고객 기본정보 저장
 	 * @param commandMap

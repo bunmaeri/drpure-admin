@@ -138,6 +138,15 @@
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
+		                                                <label class="col-md-2 control-label">Newsletter</label>
+		                                                <div class="col-md-10">
+		                                                    <select class="table-group-action-input form-control input-large" name="newsletter" id="newsletter">
+		                                                        <option value="1" <c:if test="${info.newsletter=='1'}">selected</c:if>>활성</option>
+		                                                        <option value="0" <c:if test="${info.newsletter=='0'}">selected</c:if>>비활성</option>
+		                                                    </select>
+		                                                </div>
+		                                            </div>
+			                                        <div class="form-group">
 		                                                <label class="col-md-2 control-label">고객 상태
 		                                                    <span class="required"> * </span>
 		                                                </label>

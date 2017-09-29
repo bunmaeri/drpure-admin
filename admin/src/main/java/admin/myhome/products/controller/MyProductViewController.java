@@ -230,6 +230,11 @@ public class MyProductViewController {
 		this.validFormInfo(validMap, commandMap);
 		
 		if(ObjectUtils.isEmpty(validMap)) {
+			String stock_status_id = "7";
+			if(commandMap.get2String("quantity").trim().equals("0")) {
+				stock_status_id = "5";
+			}
+			commandMap.put("stock_status_id", stock_status_id);
 			// 기존에 존재하는지 체크
 			Map<String,Object> info = myProductViewService.product(commandMap.getMap());
 			//System.err.println(info.get("product_id"));

@@ -225,6 +225,16 @@
 	                        <span class="title">Tax Rates</span>
 	                    </a>
 	                </li>
+	                <li class="nav-item ${ctag:getContainsActiveMenu(sessionScope.URL, '/settings/access/ip')}">
+	                    <a href="/settings/access/ip.dr" class="nav-link ">
+	                        <span class="title">Access IP</span>
+	                    </a>
+	                </li>
+	                <li class="nav-item ${ctag:getActiveMenu(sessionScope.URL, '/settings/access/password.dr')}">
+	                    <a href="/settings/access/password.dr" class="nav-link ">
+	                        <span class="title">Access Password</span>
+	                    </a>
+	                </li>
 	            </ul>
 	        </li>
 	        

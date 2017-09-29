@@ -124,6 +124,15 @@ public class MyProductViewDAO extends AbstractDAO {
 	}
 	
 	/**
+	 * 재고 상태 코드 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	public void updateProductStockStatus(Map<String, Object> map) throws Exception{
+		update("my_productView.updateProductStockStatus", map);
+	}
+	
+	/**
 	 * 제품 수량 추가
 	 * @param map
 	 * @throws Exception

@@ -230,6 +230,12 @@ public class ProductViewController {
 		this.validFormInfo(validMap, commandMap);
 		
 		if(ObjectUtils.isEmpty(validMap)) {
+			String stock_status_id = "7";
+			if(commandMap.get2String("quantity").trim().equals("0")) {
+				stock_status_id = "5";
+			}
+			commandMap.put("stock_status_id", stock_status_id);
+			
 			// 기존에 존재하는지 체크
 			Map<String,Object> info = productViewService.product(commandMap.getMap());
 			//System.err.println(info.get("product_id"));
@@ -240,7 +246,7 @@ public class ProductViewController {
 				productViewService.addProduct(commandMap.getMap()); // 추가
 				productViewService.addProductQuantity(commandMap.getMap()); // 제품 수량 추가
 			}
-			
+//			productViewService.updateProductStockStatus(commandMap.getMap()); // 재고 상태 코드 업데이트
 			mv.addObject("success", "정상적으로 저장되었습니다.");
 		} else {
 			mv.addObject("error", "오류 메세지를 확인해주십시요.");

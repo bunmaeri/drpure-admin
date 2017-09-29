@@ -25,8 +25,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		if (log.isDebugEnabled()) {
-//			log.debug("======================================          START         ======================================");
-//			log.debug(" Request URI \t:  " + request.getRequestURI());
+			log.debug("==========  START  ==========");
+			log.debug(" Request URI \t:  " + request.getRequestURI());
 		}
 		//this.logging(request);
 		return super.preHandle(request, response, handler);
@@ -35,9 +35,9 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 		if (log.isDebugEnabled()) {
-//			log.debug("======================================           END          ======================================\n");
+			log.debug("==========  END  ==========\n");
 		}
-//		this.logging(request);
+		this.logging(request);
 	}
 	
 	public void logging(HttpServletRequest request) throws Exception {
@@ -182,31 +182,31 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 //	        logger.debug(aName + " : " + aValue);
 	        cnt++;
 	    }
-		hash.put("attribute", defaultValue(buff.toString(),""));
-
+//		hash.put("attribute", defaultValue(buff.toString(),""));
+		hash.put("attribute", "");
 		
-//		ServerLocation serverLocation = new GetLocation().getLocation(hash.get("remote_addr").toString());
-//		hash.put("geo_city", defaultValue(serverLocation.getCity(),""));
-//		String geo_state = "";
-//		if(null!=serverLocation.getRegion() && !serverLocation.getRegion().equals("")) {
-//			geo_state = defaultValue(serverLocation.getRegionName(),"")+"("+defaultValue(serverLocation.getRegion(),"")+")";
-//		}
-//		hash.put("geo_state", geo_state);
-//		String geo_country = "";
-//		if(null!=serverLocation.getCountryCode() && !serverLocation.getCountryCode().equals("")) {
-//			geo_country = defaultValue(serverLocation.getCountryName(),"")+"("+defaultValue(serverLocation.getCountryCode(),"")+")";
-//		}
-//		hash.put("geo_country", geo_country);
-//		buff.setLength(0);
-//		buff.append("postal_code=").append(defaultValue(serverLocation.getPostalCode(),""));buff.append("|;|");
-//		buff.append("latitude/longitude=").append(defaultValue(serverLocation.getLatitude(),"")).append(",").append(defaultValue(serverLocation.getLongitude(),""));
-////		buff.append("longitude=").append(defaultValue(serverLocation.getLongitude(),""));
-//		hash.put("geo_etc", buff.toString());
+		ServerLocation serverLocation = new GetLocation().getLocation(hash.get("remote_addr").toString());
+		hash.put("geo_city", defaultValue(serverLocation.getCity(),""));
+		String geo_state = "";
+		if(null!=serverLocation.getRegion() && !serverLocation.getRegion().equals("")) {
+			geo_state = defaultValue(serverLocation.getRegionName(),"")+"("+defaultValue(serverLocation.getRegion(),"")+")";
+		}
+		hash.put("geo_state", geo_state);
+		String geo_country = "";
+		if(null!=serverLocation.getCountryCode() && !serverLocation.getCountryCode().equals("")) {
+			geo_country = defaultValue(serverLocation.getCountryName(),"")+"("+defaultValue(serverLocation.getCountryCode(),"")+")";
+		}
+		hash.put("geo_country", geo_country);
+		buff.setLength(0);
+		buff.append("postal_code=").append(defaultValue(serverLocation.getPostalCode(),""));buff.append("|;|");
+		buff.append("latitude/longitude=").append(defaultValue(serverLocation.getLatitude(),"")).append(",").append(defaultValue(serverLocation.getLongitude(),""));
+//		buff.append("longitude=").append(defaultValue(serverLocation.getLongitude(),""));
+		hash.put("geo_etc", buff.toString());
 		
-		hash.put("geo_city", "");
-		hash.put("geo_state", "");
-		hash.put("geo_country", "");
-		hash.put("geo_etc", "");
+//		hash.put("geo_city", "");
+//		hash.put("geo_state", "");
+//		hash.put("geo_country", "");
+//		hash.put("geo_etc", "");
 
 		StringBuffer seql = new StringBuffer();
         seql.append("\n INSERT INTO log_admin ( ");

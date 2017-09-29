@@ -110,10 +110,10 @@ $('#button-submit').on('click', function() {
         data: $('#form input, #form textarea, #form select'),
         dataType: 'json',
         beforeSend: function() {
-            $('#button_submit').prop('disabled', true);
+            $('#button-submit').prop('disabled', true);
         },
         complete: function() {
-            $('#button_submit').prop('disabled', false).button('reset');
+            $('#button-submit').prop('disabled', false).button('reset');
         },
         success: function(json) {
             $('.alert').remove();

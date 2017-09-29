@@ -132,6 +132,16 @@ Logger log = Logger.getLogger(this.getClass());
 	}
 	
 	/**
+	 * 재고 상태 코드 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	@Override
+	public void updateProductStockStatus(Map<String, Object> map) throws Exception{
+		productViewDAO.updateProductStockStatus(map);
+	}
+	
+	/**
 	 * 제품 수량 추가
 	 */
 	@Override

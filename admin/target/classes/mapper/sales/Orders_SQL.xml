@@ -250,7 +250,7 @@
     
     <update id="updateProductStockStatus" parameterType="hashmap">
         <![CDATA[
-            UPDATE dr_product 
+            UPDATE ${table_prefix}_product 
                SET stock_status_id = #{stock_status_id}
              WHERE model = #{model}
         ]]>

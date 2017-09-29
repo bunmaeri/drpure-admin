@@ -20,7 +20,13 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 //		System.err.println(client_ip);
 		String reqUrl = request.getRequestURI().toString();
 //		System.err.println("-----------------> Url check Interceptor , reqUrl : " +reqUrl );
-		if(reqUrl.equals("/denied/access.dr")){
+		if(reqUrl.equals("/denied/access.dr") || reqUrl.contains("/settings/access/ip")) {
+			BaseController.setCustomSession(request, reqUrl, Session.URL);
+			String[] urls = reqUrl.split("/");
+			if(urls.length>2) {
+//				System.err.println("Session.NAV: /"+urls[1]);
+				BaseController.setCustomSession(request, "/"+urls[1], Session.NAV);
+			}
 			return true;
 		}
 		if(!ips.getBoolean(client_ip)) {
