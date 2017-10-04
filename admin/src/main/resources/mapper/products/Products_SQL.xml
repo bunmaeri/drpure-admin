@@ -46,7 +46,7 @@
     </select>
     
     <select id="listProduct" parameterType="hashmap" resultType="hashmap">
-    <include refid="common.pagingPre"/>
+      <include refid="common.pagingPre"/>
         SELECT p.product_id,
                p.model,
                p.sku,
@@ -67,10 +67,14 @@
                LEFT JOIN dr_manufacturer m ON (m.manufacturer_id = p.manufacturer_id)
          WHERE pd.language_id = #{language_id}
       <if test="name!=null and name!=''">
+        <![CDATA[
            AND pd.name LIKE CONCAT('%',#{name},'%')
+        ]]>
       </if>
       <if test="model!=null and model!=''">
+        <![CDATA[
            AND p.model LIKE CONCAT('%',#{model},'%')
+        ]]>
       </if>
       <if test="reward_group_id!=null and reward_group_id!=''">
            AND p.reward_group_id = #{reward_group_id}

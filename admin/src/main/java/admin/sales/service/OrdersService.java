@@ -67,6 +67,13 @@ public interface OrdersService {
 	void addCustomerReward(Map<String, Object> map) throws Exception;
 	
 	/**
+	 * 고객 Reward 삭제(주문 취소)
+	 * @param map
+	 * @throws Exception
+	 */
+	void deleteCustomerReward(Map<String, Object> map) throws Exception;
+	
+	/**
 	 * 주문 History 추가
 	 * @param map
 	 * @throws Exception

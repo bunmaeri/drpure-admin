@@ -25,11 +25,14 @@
 		                </div>
 	                    <div class="portlet-body">
 	                        <div class="tabbable-bordered">
-	                            <ul class="nav nav-tabs">
-	                                <li class="active">
-	                                    <a href="javascript:;" data-toggle="tab"> Edit </a>
+	                        	<ul class="nav nav-tabs">
+                            	    <li class="active">
+	                                    <a href="javascript:;" onclick="javascript:location='/contents/notice/info/${contents_id}/${language_id}.dr'" data-toggle="tab"> Edit </a>
 	                                </li>
-	                            </ul>
+	                                <li>
+	                                    <a href="javascript:;" onclick="javascript:location='/contents/notice/image/${contents_id}/${language_id}.dr'" data-toggle="tab"> 이미지 </a>
+	                                </li>
+		                        </ul>
 	                            <div class="tab-content">
 	                                <div class="tab-pane active" id="language${info.language_id}">
 	                                	<div class="row">

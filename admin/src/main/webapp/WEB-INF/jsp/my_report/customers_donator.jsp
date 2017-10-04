@@ -105,10 +105,10 @@
 		                            <tbody>
 		                            <c:forEach items="${list}" var="list">
 										<tr>
-											<td class="text-align-left"><a href="/customer/view/${list.customer_id}.dr">${list.customer_name}</a></td>
+											<td class="text-align-left"><a href="/customer/view/${list.customer_id}.dr" target="_blank">${list.customer_name}</a></td>
 											<td class="text-align-left">${list.email}</td>
 											<td class="">${list.customer_group}</td>
-											<td class=""><a href="/sales/order/view/${list.order_id}/0.dr">${list.order_id}</a></td>
+											<td class=""><a href="/sales/order/view/${list.order_id}/0.dr" target="_blank">${list.order_id}</a></td>
 											<td class="">${list.order_date}</td>
 											<td class="">${list.order_status}</td>
 											<td class="text-align-right">${ctag:getCurrency(list.total)}</td>

@@ -41,8 +41,8 @@ public class MailChimpEmail {
 				if(null!=messageStatusReports) {
 					int size = messageStatusReports.length;
 					for(int i=0;i<size;i++) {
-						System.err.println(messageStatusReports[i].getStatus());
-						System.err.println(messageStatusReports[i].getRejectReason());
+						System.err.println("MailChimpEmail: "+messageStatusReports[i].getStatus());
+						System.err.println("Reject Reason: "+messageStatusReports[i].getRejectReason());
 					}
 				}
 			} catch(final MandrillApiError e) {

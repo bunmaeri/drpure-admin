@@ -257,4 +257,22 @@ public class ProductViewDAO extends AbstractDAO {
 	public void deleteProductSpecial(Map<String, Object> map) throws Exception{
 		delete("productView.deleteProductSpecial", map);
 	}
+	
+	/**
+	 * 제품 삭제
+	 * @param map
+	 * @throws Exception
+	 */
+	public void removeProduct(Map<String, Object> map) throws Exception{
+		delete("productView.removeProductQuantity", map);
+		delete("productView.removeProduct", map);
+		delete("productView.removeProductDescription", map);
+		delete("productView.removeProductDiscount", map);
+		delete("productView.removeProductImage", map);
+		delete("productView.removeProductRecentlyView", map);
+		delete("productView.removeProductReward", map);
+		delete("productView.removeProductSpecial", map);
+		delete("productView.removeProductToCategory", map);
+		delete("productView.removeProductToStore", map);
+	}
 }

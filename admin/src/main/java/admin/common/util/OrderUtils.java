@@ -38,23 +38,25 @@ public class OrderUtils {
 		// 한국어
 		if(language_id==1) {
 			address.append(map.get(addressType+"firstname"));
-			if(null!=map.get(addressType+"lastname") && !map.get(addressType+"lastname").equals("")) {
+			if(!ObjectUtils.null2void(map.get(addressType+"lastname")).equals("")) {
+//			if(null!=map.get(addressType+"lastname") && !map.get(addressType+"lastname").equals("")) {
 				address.append(" ").append(map.get(addressType+"lastname"));
 			}
-			if(null!=map.get(addressType+"company") && !map.get(addressType+"company").equals("")) {
+			if(!ObjectUtils.null2void(map.get(addressType+"company")).equals("")) {
+//			if(null!=map.get(addressType+"company") && !map.get(addressType+"company").equals("")) {
 				address.append("<br/>").append(map.get(addressType+"company"));
 			}
 			if(country_id.equals("113")) {
 				address.append("<br/>").append(map.get(addressType+"address_1"));
-				if(null!=map.get("address_2") && !map.get("address_2").equals("")) {
+				if(!ObjectUtils.null2void(map.get(addressType+"address_2")).equals("")) {
 					address.append(" ").append(map.get("address_2"));
 				}
 				address.append("<br/>").append(map.get(addressType+"postcode"));
 				address.append("<br/>").append(map.get(addressType+"country"));
 			} else {
 				address.append("<br/>").append(map.get(addressType+"address_1"));
-				if(null!=map.get("address_2") && !map.get("address_2").equals("")) {
-					address.append(" ").append(map.get("address_2"));
+				if(!ObjectUtils.null2void(map.get(addressType+"address_2")).equals("")) {
+					address.append(" ").append(map.get(addressType+"address_2"));
 				}
 				address.append("<br/>").append(map.get(addressType+"city")).append(", ").append(map.get(addressType+"zone")).append(" ").append(map.get(addressType+"postcode"));
 //				address.append("<br/>").append(map.get(addressType+"postcode"));

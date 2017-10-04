@@ -66,7 +66,7 @@
 								                            <tbody>
 								                            <c:forEach items="${list}" var="item">
 								                            	<tr role="row">
-								                            		<td style="width: 100px;"><a href="/sales/order/view/${item.order_id}.dr" target="_blank">${item.order_id}</a></td>
+								                            		<td style="width: 100px;"><a href="/sales/order/view/${item.order_id}/${item.store_id}.dr" target="_blank">${item.order_id}</a></td>
 								                            		<td>
 								                            		    ${item.shipping_customer_name}(${item.customer_id})
 								                            		    <br/>(${item.email})

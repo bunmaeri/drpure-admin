@@ -124,7 +124,7 @@
 		                            <tbody>
 		                            <c:forEach items="${list}" var="item">
 		                            	<tr role="row">
-		                            		<td class="text-align-center"><a href="/my_product/view/info/${item.product_id}/1.dr" target="_self"><img src="/image/${item.image}" class="img-responsive" style="width:auto;height:50px;margin-left:auto;margin-right:auto;display:block;"></a></td>
+		                            		<td class="text-align-center"><a href="/my_product/view/image/${item.product_id}/1.dr" target="_self"><img src="/image/${item.image}" class="img-responsive" style="width:auto;height:50px;margin-left:auto;margin-right:auto;display:block;"></a></td>
 		                            		<td class="text-align-left"><a href="/my_product/view/info/${item.product_id}/1.dr" target="_self">${item.name}</a></td>
 		                            		<td class="text-align-center">${item.model}</td>
 		                            		<td class="text-align-center">${item.manufacturer_name}</td>

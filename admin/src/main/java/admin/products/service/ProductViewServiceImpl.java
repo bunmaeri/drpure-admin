@@ -273,4 +273,14 @@ Logger log = Logger.getLogger(this.getClass());
 	public void deleteProductSpecial(Map<String, Object> map) throws Exception{
 		productViewDAO.deleteProductSpecial(map);
 	}
+	
+	/**
+	 * 제품 삭제
+	 * @param map
+	 * @throws Exception
+	 */
+	@Override
+	public void removeProduct(Map<String, Object> map) throws Exception{
+		productViewDAO.removeProduct(map);
+	}
 }

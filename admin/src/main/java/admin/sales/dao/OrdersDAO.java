@@ -93,6 +93,15 @@ public class OrdersDAO extends AbstractDAO {
 	}
 	
 	/**
+	 * 고객 Reward 삭제(주문 취소)
+	 * @param map
+	 * @throws Exception
+	 */
+	public void deleteCustomerReward(Map<String, Object> map) throws Exception{
+		delete("salesOrders.deleteCustomerReward", map);
+	}
+	
+	/**
 	 * 주문 History 추가
 	 * @param map
 	 * @throws Exception

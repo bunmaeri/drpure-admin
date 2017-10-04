@@ -46,7 +46,7 @@
 		                            <tbody>
 									<c:forEach items="${list}" var="item">
 										<tr role="row">
-											<td class="text-align-center"><a href="/contents/information/image/${item.information_id}/${ctag:getLanguage()}.dr" target="_self"><img src="/image/${item.image}" class="img-responsive" style="width:auto;height:50px;margin-left:auto;margin-right:auto;display:block;"></a></td>
+											<td class="text-align-center"><a href="/contents/information/image/${item.information_id}/${ctag:getLanguage()}.dr"><img src="/image/${item.image}" class="img-responsive" style="width:auto;height:50px;margin-left:auto;margin-right:auto;display:block;"></a></td>
 											<td class="text-align-left"><a href="/contents/information/info/${item.information_id}/${ctag:getLanguage()}.dr">${item.title}</a></td>
 											<td class="text-align-center">${ctag:getYesOrNo(item.status)}</td>
 											<td class="text-center">

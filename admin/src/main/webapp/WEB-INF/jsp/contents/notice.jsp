@@ -3,7 +3,7 @@
 <%@include file="/WEB-INF/inc/left_menu.jspf" %>
 <div class="page-content-wrapper">
     <div class="page-content">
-        <h1 class="page-title"> 공지사항 <small>Notice</small></h1>
+        <h1 class="page-title"> 메인페이지 공지사항</h1>
         ${ctag:getSuccess(successMsg)}
         ${ctag:getError(errroMsg)}
         <div class="row">
@@ -37,6 +37,7 @@
 			                    <table class="table table-striped table-bordered table-hover table-checkable" id="datatable_orders">
 		                            <thead>
 		                                <tr role="row" class="heading">
+		                                    <th width="15%"> 이미지 </th>
 		                                    <th width="50%"> 공지사항 제목 </th>
 		                                    <th> 정렬 순서 </th>
 		                                    <th> Status </th>
@@ -46,6 +47,7 @@
 		                            <tbody>
 									<c:forEach items="${list}" var="item">
 										<tr role="row">
+											<td class="text-align-left"><a href="/contents/notice/image/${item.contents_id}/${ctag:getLanguage()}.dr"><img src="/image/${item.image}" class="img-responsive" style="width:auto;height:50px;margin-left:auto;margin-right:auto;display:block;"></a></td>
 											<td class="text-align-left"><a href="/contents/notice/info/${item.contents_id}/${ctag:getLanguage()}.dr">${item.title}</a></td>
 											<td class="text-align-center">${item.sort_order}</td>
 											<td class="text-align-center">${ctag:getYesOrNo(item.status)}</td>

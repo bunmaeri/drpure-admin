@@ -87,4 +87,13 @@ public class NoticeDAO extends AbstractDAO {
 	public void deleteNotice(Map<String, Object> map) throws Exception{
 		delete("contentsNotice.deleteNotice", map);
 	}
+	
+	/**
+	 * 이미지 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	public void updateImage(Map<String, Object> map) throws Exception{
+		update("contentsNotice.updateImage", map);
+	}
 }

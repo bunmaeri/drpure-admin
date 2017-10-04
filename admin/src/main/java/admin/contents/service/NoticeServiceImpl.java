@@ -104,4 +104,15 @@ public class NoticeServiceImpl implements NoticeService {
 	public void deleteNotice(Map<String, Object> map) throws Exception {
 		noticeDAO.deleteNotice(map);
 	}
+	
+	/**
+	 * 이미지 저장
+	 * @param map
+	 * @return list
+	 * @throws Exception
+	 */
+	@Override
+	public void updateImage(Map<String, Object> map) throws Exception {
+		noticeDAO.updateImage(map);
+	}
 }

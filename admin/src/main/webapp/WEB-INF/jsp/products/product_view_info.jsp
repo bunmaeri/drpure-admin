@@ -18,7 +18,8 @@
 		                    </div>
 		                    <div class="actions btn-set">
 		                    	<button type="button" class="btn dark" id="button_back" onclick="javascript:location='/product/back.dr'"><i class="fa fa-reply"></i> BACK</button>
-	                    		<button type="button" id="button-submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
+	                    		<a href="javascript:;" data-toggle="tooltip" title="삭제" class="btn btn-sm btn-outline red" onclick="goDelete('${product.product_id}')"><i class="fa fa-trash"></i> Delete</a>
+		                    	<button type="button" id="button-submit" class="btn btn-success"><i class="fa fa-check"></i> Save</button>
 			                </div>
 		                </div>
 	                    <div class="portlet-body">
@@ -57,7 +58,7 @@
 			                                        <div class="form-group">
 			                                            <label class="col-md-2 control-label">Model</label>
 			                                            <div class="col-md-10">
-			                                            	<input type="text" class="form-control input-large" name="model" id="model" value="${info.model}" readonly>
+			                                            	<input type="text" class="form-control input-large" name="model" id="model" value="${info.model}">
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
@@ -217,6 +218,7 @@
 	                </div>
 	                <input type="hidden" name="product_id" id="product_id" value="${product_id}"/>
 	                <input type="hidden" name="language_id" id="language_id" value="${language_id}"/>
+	                <input type="hidden" name="bef_model" id="bef_model" value="${info.model}"/>
 	            </form>
 	        </div>
 	    </div>
@@ -298,6 +300,15 @@ $('#button-submit').on('click', function() {
         }
     });
 });
+
+//삭제
+function goDelete(product_id) {
+	if(confirm('삭제하시겠습니까?')) {
+		var action = '/product/remove/'+product_id+'.dr';
+		$("#form").attr("action", action);
+		$('#form').submit();
+	}
+}
 
 // Back
 $('#button_back').on('click', function() {

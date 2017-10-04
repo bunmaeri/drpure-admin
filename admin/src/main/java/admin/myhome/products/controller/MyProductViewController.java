@@ -120,8 +120,8 @@ public class MyProductViewController {
 					
 					myProductViewService.newProductMeta(commandMap.getMap()); // 제품 Meta NEW
 
-					commandMap.put("quantity", "0");
-					myProductViewService.newProductQuantity(commandMap.getMap()); // 제품 수량 테이블에 신규로 추가
+//					commandMap.put("quantity", "0");
+//					myProductViewService.newProductQuantity(commandMap.getMap()); // 제품 수량 테이블에 신규로 추가
 					
 					mv.addObject("success_product_id", commandMap.get("product_id"));
 					mv.addObject("success_language_id", commandMap.get("language_id"));
@@ -684,6 +684,24 @@ public class MyProductViewController {
 		
 		BaseController.setCustomSession(request, "정상적으로 삭제되었습니다.", Session.SUCCESS);
 //		mv.addObject("success", "정상적으로 저장되었습니다.");
+    	
+       	return mv;
+    }
+	
+	/**
+	 * 제품 삭제
+	 * @param commandMap       
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value= "/my_product/remove/{product_id}.dr")
+    public ModelAndView productRemove(HttpServletRequest request, @PathVariable String product_id, CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("redirect:/my_products.dr");
+		
+		commandMap.put("product_id", product_id);
+		myProductViewService.removeProduct(commandMap.getMap());
+		
+		BaseController.setCustomSession(request, "정상적으로 삭제되었습니다.", Session.PRODUCTS_SUCCESS);
     	
        	return mv;
     }

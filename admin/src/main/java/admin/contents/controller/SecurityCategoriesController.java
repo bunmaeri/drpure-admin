@@ -54,7 +54,7 @@ public class SecurityCategoriesController extends BaseController {
     	List<Map<String,Object>> list = securityCategoriesService.securityCategories(commandMap.getMap());
     	mv.addObject("list", list);
     	
-    	MetaUtils.contentsInformation(mv);
+    	MetaUtils.contentsSecurityCategories(mv);
     	ScriptUtils.contentsViewImaeScript(mv);
     	
     	return mv;
@@ -78,7 +78,7 @@ public class SecurityCategoriesController extends BaseController {
     	mv.addObject("code", "");
     	mv.addObject("language_id", StoreUtils.getLanguageId());
     	
-    	MetaUtils.contentsInformation(mv);
+    	MetaUtils.contentsSecurityCategories(mv);
     	ScriptUtils.contentsViewImaeScript(mv);
     	
     	return mv;
@@ -116,7 +116,7 @@ public class SecurityCategoriesController extends BaseController {
     	mv.addObject("language_id", language_id);
     	
     	
-    	MetaUtils.contentsInformation(mv);
+    	MetaUtils.contentsSecurityCategories(mv);
     	ScriptUtils.contentsViewImaeScript(mv);
     	
     	return mv;
@@ -200,13 +200,14 @@ public class SecurityCategoriesController extends BaseController {
     		BaseController.setCustomSession(request, null, Session.SUCCESS);
     	}
     
+    	MetaUtils.contentsSecurityCategories(mv);
     	ScriptUtils.categoryViewImaeScript(mv);
 
     	return mv;
     }
 	
 	/**
-	 * 이미지 페이지
+	 * 이미지 save
 	 * @param commandMap       
 	 * @return
 	 * @throws Exception

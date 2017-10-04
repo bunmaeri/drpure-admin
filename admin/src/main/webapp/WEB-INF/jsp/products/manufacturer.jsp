@@ -3,7 +3,7 @@
 <%@include file="/WEB-INF/inc/left_menu.jspf" %>
 <div class="page-content-wrapper">
     <div class="page-content">
-        <h1 class="page-title"> 제조 <small>manufacturer</small></h1>
+        <h1 class="page-title"> 제조사 <small>manufacturer</small></h1>
         ${ctag:getSuccess(successMsg)}
         ${ctag:getError(errroMsg)}
         <div class="row">

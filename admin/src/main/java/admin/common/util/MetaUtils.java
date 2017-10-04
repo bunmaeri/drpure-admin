@@ -63,6 +63,10 @@ public class MetaUtils {
 		}
 	}
 	
+	public static void contentsSecurityCategories(ModelAndView mv) {
+		mv.addObject("META_TITLE", "컨텐츠 관리 > 건강정보, 질병과 추천생약제, 임상사례 카테고리");
+	}
+	
 	public static void contentsBook(ModelAndView mv) {
 		mv.addObject("META_TITLE", "컨텐츠 관리 > 책");
 	}

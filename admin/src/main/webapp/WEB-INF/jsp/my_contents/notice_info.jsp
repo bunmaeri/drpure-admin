@@ -4,7 +4,7 @@
 <%@include file="/WEB-INF/inc/left_menu.jspf" %>
 <div class="page-content-wrapper">
     <div class="page-content">
-        <h1 class="page-title"> <span style="color:red">[My Home Doc]</span> 공지사항 수정 <small>edit notice</small></h1>
+        <h1 class="page-title"> <span style="color:red">[My Home Doc]</span> 메인페이지 공지사항 수정 <small>edit notice</small></h1>
         ${ctag:getSuccess(successMsg)}
         ${ctag:getError(errroMsg)}
         <div class="row">
@@ -25,10 +25,13 @@
 	                    <div class="portlet-body">
 	                        <div class="tabbable-bordered">
 	                            <ul class="nav nav-tabs">
-	                                <li class="active">
-	                                    <a href="javascript:;" data-toggle="tab"> Edit </a>
+                            	    <li class="active">
+	                                    <a href="javascript:;" onclick="javascript:location='/my_contents/notice/info/${contents_id}/${language_id}.dr'" data-toggle="tab"> Edit </a>
 	                                </li>
-	                            </ul>
+	                                <li>
+	                                    <a href="javascript:;" onclick="javascript:location='/my_contents/notice/image/${contents_id}/${language_id}.dr'" data-toggle="tab"> 이미지 </a>
+	                                </li>
+		                        </ul>
 	                            <div class="tab-content">
 	                                <div class="tab-pane active" id="language${info.language_id}">
 	                                	<div class="row">

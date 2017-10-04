@@ -64,4 +64,11 @@ public interface NoticeService {
 	 * @throws Exception
 	 */
 	void deleteNotice(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * 이미지 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	void updateImage(Map<String, Object> map) throws Exception;
 }

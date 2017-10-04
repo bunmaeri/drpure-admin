@@ -120,8 +120,8 @@ public class ProductViewController {
 					
 					productViewService.newProductMeta(commandMap.getMap()); // 제품 Meta NEW
 
-					commandMap.put("quantity", "0");
-					productViewService.newProductQuantity(commandMap.getMap()); // 제품 수량 테이블에 신규로 추가
+//					commandMap.put("quantity", "0");
+//					productViewService.newProductQuantity(commandMap.getMap()); // 제품 수량 테이블에 신규로 추가
 					
 					mv.addObject("success_product_id", commandMap.get("product_id"));
 					mv.addObject("success_language_id", commandMap.get("language_id"));
@@ -215,7 +215,7 @@ public class ProductViewController {
 
     	return mv;
     }
-	
+
 	/**
 	 * 제품 저장 페이지(Info)
 	 * @param commandMap
@@ -502,8 +502,10 @@ public class ProductViewController {
 		
 		String[] category_ids = commandMap.get2String("category_ids").split(",");
 		for(int i=0;i<category_ids.length;i++) {
-			commandMap.put("category_id", category_ids[i]);
-			productViewService.addProductCategory(commandMap.getMap());
+			if(!category_ids[i].trim().equals("")) {
+				commandMap.put("category_id", category_ids[i]);
+				productViewService.addProductCategory(commandMap.getMap());
+			}
 		}
 		
 		BaseController.setCustomSession(request, "정상적으로 저장되었습니다.", Session.SUCCESS);
@@ -574,19 +576,23 @@ public class ProductViewController {
 		// 필수 추천 생약제 등록
 		String[] must_contents_ids = commandMap.get2String("must_contents_ids").split(",");
 		for(int i=0;i<must_contents_ids.length;i++) {
-			commandMap.put("contents_id", must_contents_ids[i]);
-			commandMap.put("medicine_id", 2);
-			commandMap.put("status", 1);
-			productViewService.addSecurityContentsMedicine(commandMap.getMap());
+			if(!must_contents_ids[i].trim().equals("")) {
+				commandMap.put("contents_id", must_contents_ids[i]);
+				commandMap.put("medicine_id", 2);
+				commandMap.put("status", 1);
+				productViewService.addSecurityContentsMedicine(commandMap.getMap());
+			}
 		}
 		
 		// 추가 추천 생약제 등록
 		String[] add_contents_ids = commandMap.get2String("add_contents_ids").split(",");
 		for(int i=0;i<add_contents_ids.length;i++) {
-			commandMap.put("contents_id", add_contents_ids[i]);
-			commandMap.put("medicine_id", 3);
-			commandMap.put("status", 1);
-			productViewService.addSecurityContentsMedicine(commandMap.getMap());
+			if(!add_contents_ids[i].trim().equals("")) {
+				commandMap.put("contents_id", add_contents_ids[i]);
+				commandMap.put("medicine_id", 3);
+				commandMap.put("status", 1);
+				productViewService.addSecurityContentsMedicine(commandMap.getMap());
+			}
 		}
 		
 		BaseController.setCustomSession(request, "정상적으로 저장되었습니다.", Session.SUCCESS);
@@ -685,6 +691,24 @@ public class ProductViewController {
 		
 		BaseController.setCustomSession(request, "정상적으로 삭제되었습니다.", Session.SUCCESS);
 //		mv.addObject("success", "정상적으로 저장되었습니다.");
+    	
+       	return mv;
+    }
+	
+	/**
+	 * 제품 삭제
+	 * @param commandMap       
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value= "/product/remove/{product_id}.dr")
+    public ModelAndView productRemove(HttpServletRequest request, @PathVariable String product_id, CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("redirect:/products.dr");
+		
+		commandMap.put("product_id", product_id);
+		productViewService.removeProduct(commandMap.getMap());
+		
+		BaseController.setCustomSession(request, "정상적으로 삭제되었습니다.", Session.PRODUCTS_SUCCESS);
     	
        	return mv;
     }

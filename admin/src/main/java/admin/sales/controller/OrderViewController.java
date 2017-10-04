@@ -16,6 +16,8 @@ import admin.common.common.CommandMap;
 import admin.common.constant.Session;
 import admin.common.controller.BaseController;
 import admin.common.controller.CodeController;
+import admin.common.email.FedexTrackingEmail;
+import admin.common.email.MailChimpEmail;
 import admin.common.service.CodeService;
 import admin.common.service.CommonService;
 import admin.common.util.ObjectUtils;
@@ -150,6 +152,8 @@ public class OrderViewController {
 	    			ordersService.updateProductQuantity(orderProductMap);
     			}
     		}
+    		// reward 삭제
+    		ordersService.deleteCustomerReward(commandMap.getMap());
     	} else
     	// 취소 상태코드에서 정상 상태 코드로 변경되면 제품 수량에 마이너스 해준다.
 		if(order_status_list.contains(param_order_status_id) && cancel_status_list.contains(db_order_status_id)) {
@@ -173,7 +177,32 @@ public class OrderViewController {
     	
     	ordersService.updateOrderStatus(commandMap.getMap()); // 주문상태코드 업데이트
     	
+    	if(!commandMap.get2String("carrier_id").equals("")) {
+    		String comment = commandMap.get2String("comment");
+    		String carrier = commandMap.get2String("carrier_id")+" - tracking # : "+commandMap.get2String("tracking");
+    		commandMap.put("comment", carrier+"\n"+comment);
+    	}
     	ordersService.addOrderHistory(commandMap.getMap()); // 주문 이력 생성
+    	
+    	// FedEx 배송 시작 이메일 발송
+    	if(commandMap.get2String("order_status_id").equals("3") && commandMap.get2String("notify").equals("1")) {
+    		String tracking = commandMap.get2String("tracking");
+    		if(!tracking.equals("")) {
+	    		/**
+	    		 * 이메일 발송
+	    		 */
+	    		Map<String,Object> order = ordersService.orderView(commandMap.getMap());
+	    		order.put("tracking_number", tracking);
+	    		String html = FedexTrackingEmail.getHtml(order);
+	    		commandMap.put("subject", order.get("store_name")+" - 상품배송이 시작되었습니(주문번호: "+order.get("order_id"));
+				commandMap.put("html", html);
+				commandMap.put("recipient_name", order.get("customer_name"));
+				commandMap.put("recipient_email", order.get("email"));
+	//			commandMap.put("recipient_name", "조경일");
+	//			commandMap.put("recipient_email", "bunmaeri@gmail.com");
+				MailChimpEmail.run(commandMap.getMap());
+    		}
+    	}
     	
     	mv.addObject("order_id", order_id);
     	

@@ -43,6 +43,35 @@ public class ProductsController {
 	private CodeController code = new CodeController();
 	
 	/**
+	 * LEFTP에서 제품명, model로 검색했을 때..
+	 * @param request
+	 * @param commandMap
+	 * @return
+	 * @throws Exception
+	 */
+//	@RequestMapping(value="/search/left.dr")
+//    public ModelAndView searchTop(HttpServletRequest request, CommandMap commandMap) throws Exception {
+//		ModelAndView mv = null;
+//		
+//		String left_product = ObjectUtils.null2void(commandMap.get("left_product"));
+//		List<Map<String,Object>> list = productsService.searchProduct(left_product);
+//		int size = list.size();
+//		if(size==0) {
+//			mv = new ModelAndView("redirect:/products.dr");
+//			return mv;
+//		} else
+//		if(size==1) {
+//			Map<String,Object> product = list.get(0);
+//			mv = new ModelAndView("redirect:/product/view/info/"+product.get("product_id")+"/"+product.get("language_id")+".dr");
+//			mv.addObject("product", left_product);
+//			return mv;
+//		} else {
+//			mv = new ModelAndView("redirect:/products.dr");
+//			mv.addObject("product", left_product);
+//			return mv;
+//		}
+//	}
+	/**
 	 * Products 자동 조회
 	 * @param commandMap
 	 * @return

@@ -135,8 +135,8 @@ public class OrderController {
         		invoice_my = ObjectUtils.null2Value(map.get("cnt"), "0");
         	}
         }
-        
-        // Invoice 상태의 주문 수량(ICE)
+       
+        // Invoice 상태의 주문 수량(ICE) => 배송 국가가 있을 때에는 따로 따로
     	list = ordersService.invoiceOrderCntIce(commandMap.getMap());
         size = list.size();
         map = null;

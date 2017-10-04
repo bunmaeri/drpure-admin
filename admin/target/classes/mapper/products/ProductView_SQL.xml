@@ -74,7 +74,7 @@
     
     <select id="maxModel" resultType="int">
         SELECT MAX(model) + 1 AS model
-          FROM product_quantity
+          FROM dr_product
     </select>
     
     <insert id="newProduct" parameterType="hashmap" useGeneratedKeys="true" keyProperty="product_id">
@@ -170,10 +170,15 @@
     
     <update id="updateProductQuantity" parameterType="hashmap">
         <![CDATA[
-            UPDATE product_quantity 
-               SET quantity = #{quantity},
-                   date_modified = now()
-             WHERE model = #{model}
+            INSERT INTO product_quantity(model, quantity, date_added, date_modified)
+            VALUES
+            ( 
+               #{model},
+               #{quantity},
+               now(),
+               now()
+            )
+            ON DUPLICATE KEY UPDATE quantity=#{quantity}, date_modified = now()
         ]]>
     </update>
     
@@ -224,8 +229,6 @@
 		       LEFT JOIN dr_category_description cd2 ON (cp.category_id = cd2.category_id)
 		 WHERE cd1.language_id = #{language_id}
 		   AND cd2.language_id = #{language_id}
-		   AND c1.status = 1
-		   AND c2.status = 1
 		 GROUP BY cp.category_id
 		 ORDER BY cp.level
     </select>
@@ -306,5 +309,46 @@
     <delete id="deleteProductSpecial" parameterType="hashmap">
         DELETE FROM dr_product_special 
          WHERE product_special_id = #{product_special_id}
+    </delete>
+    
+    <delete id="removeProductQuantity" parameterType="hashmap">
+        DELETE FROM product_quantity
+         WHERE model = (SELECT s.model FROM dr_product s WHERE s.product_id = #{product_id})
+    </delete>
+    <delete id="removeProduct" parameterType="hashmap">
+        DELETE FROM dr_product
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductDescription" parameterType="hashmap">
+        DELETE FROM dr_product_description
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductDiscount" parameterType="hashmap">
+        DELETE FROM dr_product_discount
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductImage" parameterType="hashmap">
+        DELETE FROM dr_product_image
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductRecentlyView" parameterType="hashmap">
+        DELETE FROM dr_product_recently_view
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductReward" parameterType="hashmap">
+        DELETE FROM dr_product_reward
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductSpecial" parameterType="hashmap">
+        DELETE FROM dr_product_special
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductToCategory" parameterType="hashmap">
+        DELETE FROM dr_product_to_category
+         WHERE product_id = #{product_id}
+    </delete>
+    <delete id="removeProductToStore" parameterType="hashmap">
+        DELETE FROM dr_product_to_store
+         WHERE product_id = #{product_id}
     </delete>
 </mapper>

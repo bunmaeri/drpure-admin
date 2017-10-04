@@ -193,4 +193,11 @@ public interface MyProductViewService {
 	 * @throws Exception
 	 */
 	void deleteProductSpecial(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * 제품 삭제
+	 * @param map
+	 * @throws Exception
+	 */
+	void removeProduct(Map<String, Object> map) throws Exception;
 }

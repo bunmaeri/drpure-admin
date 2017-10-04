@@ -75,4 +75,10 @@
              WHERE contents_id = #{contents_id}
         ]]>
     </delete>
+    
+    <update id="updateImage" parameterType="hashmap">
+        UPDATE dr_contents 
+           SET image = #{image}
+         WHERE contents_id = #{contents_id}
+    </update>
 </mapper>

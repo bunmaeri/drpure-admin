@@ -3,32 +3,32 @@
 <mapper namespace="my_securityCategories">
     <select id="securityCategories" parameterType="hashmap" resultType="hashmap">
         SELECT *
-          FROM dr_security
+          FROM my_security
          WHERE language_id = #{language_id}
          ORDER BY title ASC
     </select>
     
     <select id="totalSecurityCategories" parameterType="hashmap" resultType="int">
-        SELECT COUNT(*) AS total FROM dr_security
+        SELECT COUNT(*) AS total FROM my_security
     </select>
     
     <select id="securityCategoryInfo" parameterType="hashmap" resultType="hashmap">
         SELECT *
-          FROM dr_security
+          FROM my_security
          WHERE code = #{code}
            AND language_id = #{language_id}
     </select>
     
     <select id="isSecurityCategory" parameterType="hashmap" resultType="int">
         SELECT COUNT(*) AS total
-          FROM dr_security
+          FROM my_security
          WHERE code = #{code}
            AND language_id = #{language_id}
     </select>
     
     <update id="updateSecurityCategory" parameterType="hashmap">
         <![CDATA[
-            UPDATE dr_security 
+            UPDATE my_security 
                SET title = #{title},
                    description = #{description},
                    meta_title = #{meta_title},
@@ -43,7 +43,7 @@
     
     <insert id="addSecurityCategory" parameterType="hashmap">
         <![CDATA[
-            INSERT INTO dr_security(code, language_id, title, description, meta_title, meta_description, meta_keyword, status, date_added, date_modified)
+            INSERT INTO my_security(code, language_id, title, description, meta_title, meta_description, meta_keyword, status, date_added, date_modified)
             VALUES
             (
                 #{code},
@@ -62,13 +62,13 @@
     
     <delete id="deleteSecurityCategory" parameterType="hashmap">
         <![CDATA[
-            DELETE FROM dr_security 
+            DELETE FROM my_security 
              WHERE code = #{code}
         ]]>
     </delete>
     
     <update id="updateImage" parameterType="hashmap">
-        UPDATE dr_security 
+        UPDATE my_security 
            SET image = #{image},
                date_modified = NOW()
          WHERE code = #{code}

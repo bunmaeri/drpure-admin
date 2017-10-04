@@ -5,19 +5,24 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import admin.common.common.CommandMap;
 import admin.common.constant.Message;
+import admin.common.constant.Session;
 import admin.common.controller.BaseController;
+import admin.common.util.FileUtils;
 import admin.common.util.MetaUtils;
 import admin.common.util.ObjectUtils;
 import admin.common.util.Pagemaker;
+import admin.common.util.ScriptUtils;
 import admin.common.util.StoreUtils;
 import admin.contents.language.Notice;
 import admin.contents.service.NoticeService;
@@ -32,6 +37,9 @@ public class NoticeController extends BaseController {
 	
 	@Resource(name="languagesService")
 	private LanguagesService languagesService;
+	
+	@Resource(name="fileUtils")
+    private FileUtils fileUtils;
 	
 	/**
 	 * Contents > 공지사항
@@ -175,6 +183,64 @@ public class NoticeController extends BaseController {
 			BaseController.setErrorMessage(validMap, "meta_title", Notice.Error.META_TAG_TITLE);
 		}
 	}
+	
+	/**
+	 * 이미지 페이지
+	 * @param commandMap
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value= "/contents/notice/image/{contents_id}/{language_id}.dr")
+    public ModelAndView categoryViewImage(HttpServletRequest request, @PathVariable String contents_id, @PathVariable String language_id, CommandMap commandMap) throws Exception {
+    	ModelAndView mv = new ModelAndView("/contents/notice_image");
+    	
+    	/**
+    	 * 기본 정보
+    	 */
+    	commandMap.put("contents_id", contents_id);
+    	commandMap.put("language_id", 1);
+    	
+    	Map<String,Object> info = noticeService.noticeInfo(commandMap.getMap());
+    	mv.addObject("info", info.get("map")); //
+   
+    	mv.addObject("contents_id", contents_id);
+    	mv.addObject("language_id", language_id);
+    	
+    	if(null!=BaseController.getCustomSession(request, Session.SUCCESS)) {
+    		mv.addObject("successMsg", BaseController.getCustomSession(request, Session.SUCCESS));
+    		BaseController.setCustomSession(request, null, Session.SUCCESS);
+    	}
+    
+    	ScriptUtils.categoryViewImaeScript(mv);
+
+    	return mv;
+    }
+	
+	/**
+	 * 이미지 페이지
+	 * @param commandMap       
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value= "/contents/notice/save/image.dr", method = RequestMethod.POST)
+    public ModelAndView categorySaveImage(HttpServletRequest request, CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("redirect:/contents/notice/image/"+commandMap.get2String("contents_id")+"/"+commandMap.get2String("language_id")+".dr");
+
+		String folder = "banner/";
+		fileUtils.setFilePath(StoreUtils.getFilepath()+folder);
+		fileUtils.setViewPath(folder);
+		fileUtils.parseInsertFileInfo(commandMap.getMap(), request);
+		
+		if(!commandMap.get2String("image").equals("")) {
+//			commandMap.put("image", commandMap.get2String("original_image"));
+			noticeService.updateImage(commandMap.getMap());
+		}
+		
+		BaseController.setCustomSession(request, "정상적으로 저장되었습니다.", Session.SUCCESS);
+//		mv.addObject("success", "정상적으로 저장되었습니다.");
+    	
+       	return mv;
+    }
 	
 	/**
 	 * 공지사항 삭제

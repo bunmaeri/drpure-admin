@@ -105,6 +105,14 @@ Logger log = Logger.getLogger(this.getClass());
 	}
 	
 	/**
+	 * 고객 Reward 삭제(주문 취소)
+	 */
+	@Override
+	public void deleteCustomerReward(Map<String, Object> map) throws Exception{
+		ordersDAO.deleteCustomerReward(map);
+	}
+	
+	/**
 	 * 주문 History 추가
 	 */
 	@Override
