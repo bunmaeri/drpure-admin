@@ -266,6 +266,7 @@
 		 WHERE sc.code = 'disease'
 		   AND sc.contents_id = #{contents_id}
 		   AND scm.medicine_id = #{medicine_id}
+		   AND dp.language_id = 1
     </select>
     
     <delete id="deleteSecurityContentsMedicine" parameterType="hashmap">

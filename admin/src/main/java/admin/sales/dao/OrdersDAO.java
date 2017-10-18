@@ -236,6 +236,17 @@ public class OrdersDAO extends AbstractDAO {
 	}
 	
 	/**
+	 * 적립포인트 조회
+	 * @param map
+	 * @return list
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> customerRewardByOrder(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>) selectList("salesOrders.customerRewardByOrder", map);
+	}
+	
+	/**
 	 * 주문한 제품을 목록 조회한다.
 	 * @param map
 	 * @return list
@@ -304,5 +315,25 @@ public class OrdersDAO extends AbstractDAO {
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> searchOrder(String order_id) throws Exception{
 		return (List<Map<String, Object>>) selectList("salesOrders.searchOrder", order_id);
+	}
+	
+	/**
+	 * 주문 합계 금액
+	 * @param map
+	 * @return int
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> orderTotalSum(Map<String, Object> map) throws Exception{
+		return (Map<String, Object>) selectOne("salesOrders.orderTotalSum", map);
+	}
+	
+	/**
+	 * 마이홈닥고객 업데이트
+	 * @param map
+	 * @throws Exception
+	 */
+	public void updateToMyhomedoc(Map<String, Object> map) throws Exception{
+	    update("salesOrders.updateToMyhomedoc", map);
 	}
 }

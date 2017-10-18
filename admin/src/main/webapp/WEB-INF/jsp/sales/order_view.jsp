@@ -44,7 +44,7 @@
                                             </div>
                                             <div class="row static-info">
                                                 <div class="col-md-5 name"> Reward Points </div>
-                                                <div class="col-md-7 value"> ${ctag:getNumber(info.points)} </div>
+                                                <div class="col-md-7 value"> ${ctag:getNumber(info.points)} ${reward_detail} </div>
                                             </div>
                                             <div class="row static-info">
                                                 <div class="col-md-5 name"> 결제방법 </div>

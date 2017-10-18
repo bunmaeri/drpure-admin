@@ -20,6 +20,7 @@ import admin.common.email.FedexTrackingEmail;
 import admin.common.email.MailChimpEmail;
 import admin.common.service.CodeService;
 import admin.common.service.CommonService;
+import admin.common.util.CustomTag;
 import admin.common.util.ObjectUtils;
 import admin.common.util.OrderUtils;
 import admin.common.util.ScriptUtils;
@@ -57,7 +58,7 @@ public class OrderViewController {
     
     	commandMap.put("table_prefix", StoreUtils.getTablePrefix(store_id));
     	mv.addObject("store_id", store_id);
-    	
+    
     	OrderUtils outil = new OrderUtils();
     	commandMap.put("order_id", order_id);
     	/**
@@ -71,6 +72,27 @@ public class OrderViewController {
         
     		return mv;
     	}
+    	List<Map<String,Object>> rewardList = ordersService.customerRewardByOrder(commandMap.getMap());
+    	int rewardCnt = rewardList.size();
+    	if(rewardCnt>1) {
+    		StringBuffer rewardSB = new StringBuffer();
+    		rewardSB.append(" = ");
+    		Map<String,Object> rewardMap = null;
+    		for(int i=0;i<rewardCnt;i++) {
+    			rewardMap = rewardList.get(i);
+    			if(!ObjectUtils.isEmpty(rewardMap)) {
+    				if(ObjectUtils.null2void(rewardMap.get("point_type")).equals("minus")) {
+    					rewardSB.append(CustomTag.getNumber(ObjectUtils.null2Value(rewardMap.get("points"),"0"))).append("(사용) ");
+    				} else {
+    					rewardSB.append(CustomTag.getNumber(ObjectUtils.null2Value(rewardMap.get("points"),"0"))).append("(적립) ");
+    				}
+    			}
+    		}
+    		mv.addObject("reward_detail", rewardSB.toString());
+    	} else {
+    		mv.addObject("reward_detail", "");
+    	}
+    	
     	map.put("payment_address", outil.orderHistoryAddress("payment_", map));
     	map.put("shipping_address", outil.orderHistoryAddress("shipping_", map));
     	mv.addObject("info", map);
@@ -174,8 +196,22 @@ public class OrderViewController {
     			}
     		}
 		}
-    	
+   
     	ordersService.updateOrderStatus(commandMap.getMap()); // 주문상태코드 업데이트
+    	
+    	try {
+	    	// 주문 합계가 400불이 넘고, My Home Doc 조건(한국 주문 + 정상고객)이 되고, My Home Doc 고객이 아니었을 때 업데이트 한다.
+			Map<String,Object> sumMap =ordersService.orderTotalSum(commandMap.getMap());
+			if(!ObjectUtils.isEmpty(sumMap)) {
+//				System.err.println(ObjectUtils.null2void(sumMap.get("myhomedoc")));
+//				System.err.println(ObjectUtils.null2void(sumMap.get("db_myhomedoc")));
+				if(!ObjectUtils.null2void(sumMap.get("myhomedoc")).equals(ObjectUtils.null2void(sumMap.get("db_myhomedoc")))) {
+					ordersService.updateToMyhomedoc(sumMap);
+				}
+			}
+    	} catch(Exception e) {
+			e.printStackTrace();
+		}
     	
     	if(!commandMap.get2String("carrier_id").equals("")) {
     		String comment = commandMap.get2String("comment");

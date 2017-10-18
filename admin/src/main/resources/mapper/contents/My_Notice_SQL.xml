@@ -77,7 +77,7 @@
     </delete>
     
     <update id="updateImage" parameterType="hashmap">
-        UPDATE dr_contents 
+        UPDATE my_contents 
            SET image = #{image}
          WHERE contents_id = #{contents_id}
     </update>

@@ -68,8 +68,8 @@
 					                        <div class="col-md-9">
 			                                    <div class="form-body">
 			                                    	<div class="form-group">
-		                                                <label class="col-md-2 control-label">My Home Doc 고객</label>
-		                                                <div class="col-md-10">
+		                                                <label class="col-md-3 control-label">My Home Doc 고객</label>
+		                                                <div class="col-md-9">
 		                                                    <select class="table-group-action-input form-control input-large" name="myhomedoc" id="myhomedoc">
 		                                                        <option value="1" <c:if test="${info.myhomedoc=='1'}">selected</c:if>>예</option>
 		                                                        <option value="0" <c:if test="${info.myhomedoc=='0'}">selected</c:if>>아니오</option>
@@ -77,24 +77,24 @@
 		                                                </div>
 		                                            </div>
 			                                        <div class="form-group">
-			                                            <label class="col-md-2 control-label">이름 (First Name)
+			                                            <label class="col-md-3 control-label">이름 (First Name)
 			                                            	<span class="required"> * </span>
 			                                            </label>
-			                                            <div class="col-md-10">
+			                                            <div class="col-md-9">
 			                                            	<input type="text" name="firstname" id="firstname" class="form-control input-large" value="${info.firstname}"/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-			                                            <label class="col-md-2 control-label">성 (Last Name)</label>
-			                                            <div class="col-md-10">
+			                                            <label class="col-md-3 control-label">성 (Last Name)</label>
+			                                            <div class="col-md-9">
 			                                            	<input type="text" name="lastname" id="lastname" class="form-control input-large" value="${info.lastname}"/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-		                                                <label class="col-md-2 control-label">고객 그룹
+		                                                <label class="col-md-3 control-label">고객 그룹
 		                                                    <span class="required"> * </span>
 		                                                </label>
-		                                                <div class="col-md-10">
+		                                                <div class="col-md-9">
 		                                                    <select class="table-group-action-input form-control input-large" name="customer_group_id" id="customer_group_id">
 		                                                    	<c:forEach items="${customerGroupsList}" var="group">
 		                                                        <option value="${group.customer_group_id}" <c:if test="${group.customer_group_id==info.customer_group_id}">selected</c:if>>${group.name}</option>
@@ -103,54 +103,63 @@
 		                                                </div>
 		                                            </div>
 		                                            <div class="form-group">
-			                                            <label class="col-md-2 control-label">이메일
+			                                            <label class="col-md-3 control-label">이메일
 			                                            	<span class="required"> * </span>
 			                                            </label>
-			                                            <div class="col-md-10">
+			                                            <div class="col-md-9">
 			                                            	<input type="text" name="email" id="email" class="form-control input-large" value="${info.email}"/>
 			                                            	<input type="hidden" name="last_email" id="last_email" value="${info.email}"/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-			                                            <label class="col-md-2 control-label">전화번호
+			                                            <label class="col-md-3 control-label">전화번호
 			                                            	<span class="required"> * </span>
 			                                            </label>
-			                                            <div class="col-md-10">
+			                                            <div class="col-md-9">
 			                                            	<input type="text" name="telephone" id="telephone" class="form-control input-large" value="${info.telephone}"/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-			                                            <label class="col-md-2 control-label">가입경로</label>
-			                                            <div class="col-md-10">
+			                                            <label class="col-md-3 control-label">가입경로</label>
+			                                            <div class="col-md-9">
 			                                            	<input type="text" name="join_path_name" id="join_path_name" class="form-control input-large" value="${info.join_path_name} <c:if test='${info.join_path_etc ne null}'>${info.join_path_etc}</c:if>" readonly/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-			                                            <label class="col-md-2 control-label">비밀번호</label>
-			                                            <div class="col-md-10">
+			                                            <label class="col-md-3 control-label">비밀번호</label>
+			                                            <div class="col-md-9">
 			                                            	<input type="password" name="password" id="password" class="form-control input-large"/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-			                                            <label class="col-md-2 control-label">마지막 비밀번호</label>
-			                                            <div class="col-md-10">
+			                                            <label class="col-md-3 control-label">마지막 비밀번호</label>
+			                                            <div class="col-md-9">
 			                                            	<input type="text" name="last_password" id="last_password" class="form-control input-large" value="${info.last_password}&nbsp;&nbsp;[${info.login_date}]" readonly/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
-		                                                <label class="col-md-2 control-label">Newsletter</label>
-		                                                <div class="col-md-10">
+		                                                <label class="col-md-3 control-label">Newsletter</label>
+		                                                <div class="col-md-9">
 		                                                    <select class="table-group-action-input form-control input-large" name="newsletter" id="newsletter">
 		                                                        <option value="1" <c:if test="${info.newsletter=='1'}">selected</c:if>>활성</option>
 		                                                        <option value="0" <c:if test="${info.newsletter=='0'}">selected</c:if>>비활성</option>
 		                                                    </select>
 		                                                </div>
 		                                            </div>
+		                                            <div class="form-group">
+		                                                <label class="col-md-3 control-label">불량고객 or 정상고객<br/>(마이홈닥 고객 안되도록)</label>
+		                                                <div class="col-md-9">
+		                                                    <select class="table-group-action-input form-control input-large" name="safe" id="safe">
+		                                                        <option value="1" <c:if test="${info.safe=='1'}">selected</c:if>>불량고객</option>
+		                                                        <option value="0" <c:if test="${info.safe=='0'}">selected</c:if>>정상고객</option>
+		                                                    </select>
+		                                                </div>
+		                                            </div>
 			                                        <div class="form-group">
-		                                                <label class="col-md-2 control-label">고객 상태
+		                                                <label class="col-md-3 control-label">고객 상태
 		                                                    <span class="required"> * </span>
 		                                                </label>
-		                                                <div class="col-md-10">
+		                                                <div class="col-md-9">
 		                                                    <select class="table-group-action-input form-control input-large" name="status" id="status">
 		                                                        <option value="1" <c:if test="${info.status=='1'}">selected</c:if>>활성</option>
 		                                                        <option value="0" <c:if test="${info.status=='0'}">selected</c:if>>비활성</option>
@@ -158,8 +167,8 @@
 		                                                </div>
 		                                            </div>
 		                                            <div class="form-group">
-									                    <label class="col-md-2 control-label">기본 결제 주소</label>
-									                    <div class="col-md-10">
+									                    <label class="col-md-3 control-label">기본 결제 주소</label>
+									                    <div class="col-md-9">
 										                    <select class="form-control" id="address_id" name="address_id">
 										                        <option value=""></option>
 																<c:forEach items="${addressList}" var="address">
@@ -169,8 +178,8 @@
 										                </div>
 									                </div>
 									                <div class="form-group">
-									                    <label class="col-md-2 control-label">기본 배송 주소</label>
-									                    <div class="col-md-10">
+									                    <label class="col-md-3 control-label">기본 배송 주소</label>
+									                    <div class="col-md-9">
 										                    <select class="form-control" id="shipping_address_id" name="shipping_address_id">
 										                        <option value=""></option>
 																<c:forEach items="${addressList}" var="address">

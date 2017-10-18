@@ -59,6 +59,7 @@
 		 WHERE o.order_status_id = #{order_status_id}
 		   AND o.shipping_country_id = #{shipping_country_id}
 		   AND o.store_id = #{store_id}
+		   AND pd.language_id=1
 		 ORDER BY o.order_id ASC, op.order_product_id ASC
     </select>
 </mapper>

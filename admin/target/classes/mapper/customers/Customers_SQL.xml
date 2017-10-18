@@ -156,7 +156,8 @@
              </if>
                status = #{status},
                myhomedoc = #{myhomedoc},
-               newsletter = #{newsletter}
+               newsletter = #{newsletter},
+               safe = #{safe}
          WHERE customer_id = #{customer_id}
     </update>
     
@@ -259,7 +260,7 @@
     
     <update id="updateCustomerInfoAddress" parameterType="hashmap">
         UPDATE dr_customer 
-           SET safe=0
+           SET approved=1
              <if test="address_id!=null and address_id!=''">
                ,address_id = #{address_id}
              </if>

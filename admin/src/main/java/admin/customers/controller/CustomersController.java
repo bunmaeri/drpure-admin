@@ -201,7 +201,11 @@ public class CustomersController {
 	    		customer_name = customer_name + " " + commandMap.get2String("lastname");
 	    	}
 	    	commandMap.put("customer_name", customer_name);
-	    	commandMap.put("password", CommonUtils.shaEncoder(commandMap.get2String("password")));
+	    	if(!commandMap.get2String("password").equals("")) {
+	    		commandMap.put("password", CommonUtils.shaEncoder(commandMap.get2String("password")));
+	    	} else {
+	    		commandMap.put("password", "");
+	    	}
 	    	customersService.updateCustomerInfo(commandMap.getMap());
 	    	mv.addObject("success", "고객 기본정보가 정상적으로 저장되었습니다.");
 		} else {

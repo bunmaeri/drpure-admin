@@ -566,6 +566,17 @@ Logger log = Logger.getLogger(this.getClass());
 	}
 	
 	/**
+	 * 적립포인트 조회
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> customerRewardByOrder(Map<String, Object> map) throws Exception {
+		return ordersDAO.customerRewardByOrder(map);
+	}
+	
+	/**
 	 * 주문한 제품을 목록 조회한다.
 	 * @param map
 	 * @return
@@ -631,5 +642,24 @@ Logger log = Logger.getLogger(this.getClass());
 	@Override
 	public List<Map<String, Object>> searchOrder(String order_id) throws Exception {
 		return ordersDAO.searchOrder(order_id);
+	}
+	
+	/**
+	 * 주문 합계 금액
+	 * @param int
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> orderTotalSum(Map<String, Object> map) throws Exception {
+		return ordersDAO.orderTotalSum(map);
+	}
+	
+	/**
+	 * 마이홈닥고객 업데이트
+	 */
+	@Override
+	public void updateToMyhomedoc(Map<String, Object> map) throws Exception{
+		ordersDAO.updateToMyhomedoc(map);
 	}
 }

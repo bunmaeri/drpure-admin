@@ -208,7 +208,7 @@ public class OrderController {
 	    		map.put("description", "Order ID: #"+map.get("order_id"));
 	    		ordersService.addCustomerReward(map); // 고객 Reward 추가
     		}
-    	
+    
     		map.put("notify", "0");
     		map.put("comment", "Create Invoice No");
     		ordersService.addOrderHistory(map); // 주문 이력 생성
@@ -319,6 +319,19 @@ public class OrderController {
     			order.put("carrier_id", "gps");
     			order.put("tracking", tracking_number);
     			ordersService.updateOrderStatus(order);
+    			
+    			try {
+	    			// 주문 합계가 400불이 넘고, My Home Doc 조건(한국 주문 + 정상고객)이 되고, My Home Doc 고객이 아니었을 때 업데이트 한다.
+	    			Map<String,Object> sumMap =ordersService.orderTotalSum(order);
+	    			if(!ObjectUtils.isEmpty(sumMap)) {
+	    				if(!ObjectUtils.null2void(sumMap.get("myhomedoc")).equals(ObjectUtils.null2void(sumMap.get("db_myhomedoc")))) {
+	    					ordersService.updateToMyhomedoc(sumMap);
+	    				}
+	    			}
+    			} catch(Exception e) {
+    				e.printStackTrace();
+    			}
+    			
     			/**
     			 * 주문 이력 생성
     			 */
@@ -332,7 +345,7 @@ public class OrderController {
         		 */
         		order.put("tracking_number", tracking_number);
         		String html = GpsTrackingEmail.getHtml(order);
-        		commandMap.put("subject", order.get("store_name")+" - 상품배송이 시작되었습니(주문번호: "+order.get("order_id"));
+        		commandMap.put("subject", order.get("store_name")+" - 상품배송이 시작되었습니다. (주문번호: "+order.get("order_id"));
     			commandMap.put("html", html);
     			commandMap.put("recipient_name", order.get("customer_name"));
     			commandMap.put("recipient_email", order.get("email"));

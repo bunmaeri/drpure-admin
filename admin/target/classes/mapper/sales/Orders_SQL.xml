@@ -198,10 +198,13 @@
     </update>
     
     <select id="countCustomerRewardForDuplication" parameterType="hashmap" resultType="int">
+      <![CDATA[
         SELECT COUNT(*) AS total
           FROM dr_customer_reward
          WHERE order_id = #{order_id}
            AND description LIKE CONCAT('Order ID: #','%')
+           AND points > 0
+      ]]>
     </select>
     
     <insert id="addCustomerReward" parameterType="hashmap">
@@ -353,6 +356,7 @@
              ${array[index]}
        </foreach>
            AND o.store_id = #{store_id}
+           AND pd.language_id=1
 		 ORDER BY o.order_id DESC, op.order_product_id ASC
     </select>
     
@@ -427,6 +431,7 @@
        </foreach>
            AND o.store_id = #{store_id}
            AND o.order_id not in (SELECT order_id FROM ${table_prefix}_product p, ${table_prefix}_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+           AND pd.language_id=1
 		 ORDER BY o.order_id DESC, op.order_product_id ASC
     </select>
     
@@ -501,6 +506,7 @@
        </foreach>
            AND o.store_id = #{store_id}
            AND o.order_id in (SELECT order_id FROM ${table_prefix}_product p, ${table_prefix}_order_product op where p.product_id = op.product_id AND p.icebox=1 group by op.order_id)
+           AND pd.language_id=1
 		 ORDER BY o.order_id DESC, op.order_product_id ASC
     </select>
     
@@ -570,6 +576,7 @@
 		                   GROUP BY so.customer_id
 		                  ) sso ON (sso.customer_id=o.customer_id)
 		 WHERE o.order_id = #{order_id}
+		   AND pd.language_id=1
     </select>
     
     <select id="listOrderForTracking" parameterType="hashmap" resultType="hashmap">
@@ -657,6 +664,18 @@
 		 WHERE o.order_id = #{order_id}
     </select>
     
+    <select id="customerRewardByOrder" parameterType="hashmap" resultType="hashmap">
+      <![CDATA[
+        SELECT CASE WHEN points<0 THEN 'minus'
+                    ELSE 'plus'
+                    END AS point_type,
+               points
+          FROM dr_customer_reward
+         WHERE order_id = #{order_id}
+         ORDER BY points DESC
+      ]]>
+    </select>
+    
     <select id="orderProducts" parameterType="hashmap" resultType="hashmap">
         SELECT p.product_id,
 			   pd.name,
@@ -676,6 +695,7 @@
 		       LEFT JOIN ${table_prefix}_product_description pd ON (p.product_id=pd.product_id)
 		       LEFT JOIN dr_manufacturer m ON (m.manufacturer_id=p.manufacturer_id)
 		 WHERE o.order_id = #{order_id}
+		   AND pd.language_id=1
 		 ORDER BY op.order_product_id ASC
     </select>
     
@@ -771,4 +791,30 @@
           FROM dr_order
          WHERE order_id LIKE CONCAT('%',#{value},'%')
     </select>
+    
+    <select id="orderTotalSum" parameterType="hashmap" resultType="hashmap">
+        SELECT CASE WHEN IFNULL(SUM(o.total),0) >= ds.value AND c.safe = 0 THEN '1'
+                    ELSE '0'
+                    END AS myhomedoc,
+               c.customer_id,
+               CASE WHEN c.myhomedoc=true THEN '1'
+                    WHEN c.myhomedoc=1 THEN '1'
+                    ELSE '0'
+                    END AS db_myhomedoc
+          FROM dr_customer c LEFT OUTER JOIN dr_order o
+               ON (c.customer_id = o.customer_id
+                   AND o.order_status_id IN(3,5)
+                   AND o.shipping_country_id = 113)
+              ,dr_setting ds
+         WHERE c.customer_id = (SELECT s.customer_id FROM dr_order s WHERE s.order_id = #{order_id})
+           AND ds.store_id = 0
+           AND ds.key = 'config_totals_to_myhomedoc'
+         GROUP BY c.customer_id, c.myhomedoc
+    </select>
+    
+    <update id="updateToMyhomedoc" parameterType="hashmap">
+        UPDATE dr_customer
+           SET myhomedoc = #{myhomedoc}
+         WHERE customer_id = #{customer_id}
+    </update>
 </mapper>

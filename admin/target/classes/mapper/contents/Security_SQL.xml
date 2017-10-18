@@ -131,6 +131,7 @@
          WHERE scm.product_id = pd.product_id
            AND scm.contents_id = #{contents_id}
            AND scm.medicine_id = #{medicine_id}
+           AND pd.language_id = 1
          ORDER BY pd.name ASC
     </select>
     

@@ -142,6 +142,14 @@ public interface OrdersService {
 	Map<String, Object> orderView(Map<String, Object> map) throws Exception;
 	
 	/**
+	 * 적립포인트 조회
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> customerRewardByOrder(Map<String, Object> map) throws Exception;
+	
+	/**
 	 * 주문한 제품을 목록 조회한다.
 	 * @param map
 	 * @return
@@ -193,4 +201,19 @@ public interface OrdersService {
 	 * @throws Exception
 	 */
 	List<Map<String, Object>> searchOrder(String order_id) throws Exception;
+	
+	/**
+	 * 주문 합계 금액
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	Map<String, Object> orderTotalSum(Map<String, Object> map) throws Exception;
+	
+	/**
+	 * 마이홈닥고객 업데이트
+	 * @param map
+	 * @throws Exception
+	 */
+	void updateToMyhomedoc(Map<String, Object> map) throws Exception;
 }

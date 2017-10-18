@@ -30,6 +30,7 @@
                LEFT JOIN dr_manufacturer m ON (m.manufacturer_id = p.manufacturer_id)
          WHERE p.status = 1
            AND p.manufacturer_id > 0
+           AND pd.language_id = 1
            AND o.store_id=0
       <if test="order_status_id==null or order_status_id==''">
            AND o.order_status_id > '0'
