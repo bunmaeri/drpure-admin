@@ -244,7 +244,7 @@ public class CustomersController {
 				int cnt = customersService.duplicateEmail(email);
 				if(cnt>0) {
 					validMap.put("error_email_css", Message.DIV_ERROR);
-					validMap.put("error_email", "이미 사용중이 이메일입니다.");
+					validMap.put("error_email", "이미 사용중인 이메일입니다.");
 				}
 			} else {
 				validMap.put("error_lastname_css", Message.DIV_ERROR);
@@ -257,6 +257,12 @@ public class CustomersController {
 		if(!flag) {
 			validMap.put("error_telephone_css", Message.DIV_ERROR);
 			validMap.put("error_telephone", "전화번호를 확인해주십시요.");
+		}
+		
+		String password = commandMap.get2String("password");
+		if(!ObjectUtils.isEmpty(password) && !password.equals("") && password.length()<5) {
+			validMap.put("error_password_css", Message.DIV_ERROR);
+			validMap.put("error_password", "4글자이상으로 입력하십시요.");
 		}
 	}
 

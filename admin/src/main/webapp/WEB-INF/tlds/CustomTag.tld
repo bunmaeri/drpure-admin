@@ -139,4 +139,24 @@
         ${ctag:getActiveOpenMenu(reqUrl, clickUrl)}
         </example>
     </function>
+    
+    <function>
+        <description>제품금액표시(할인)</description>
+        <name>getPrice</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getPrice(java.lang.String, java.lang.String)</function-signature>
+        <example>
+        ${ctag:getPrice(price, special)}
+        </example>
+    </function>
+    
+    <function>
+        <description>제품금액표시(할인)</description>
+        <name>getProductPrice</name>
+        <function-class>admin.common.util.CustomTag</function-class>
+        <function-signature>java.lang.String getProductPrice(java.lang.String, java.lang.String, java.lang.String)</function-signature>
+        <example>
+        ${ctag:getProductPrice(price, special, type)}
+        </example>
+    </function>
 </taglib>

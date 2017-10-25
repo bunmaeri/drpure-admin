@@ -47,7 +47,7 @@
 			   p.icebox,
 			   p.model,
 			   m.name AS manufacturer_name,
-			   ROUND(p.price,2) AS price,
+			   ROUND(op.price,2) AS price,
 			   op.quantity,
 		       ROUND(op.total,2) AS total,
 		       IFNULL((SELECT ptc.category_id FROM ${table_prefix}_product_to_category ptc WHERE p.product_id=ptc.product_id AND ptc.category_id=91),'') AS category_id

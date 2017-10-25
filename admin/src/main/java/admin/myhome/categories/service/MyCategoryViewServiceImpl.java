@@ -41,6 +41,16 @@ Logger log = Logger.getLogger(this.getClass());
 	}
 	
 	/**
+	 * 카테고리 Status 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	@Override
+	public void updateCategoryStatus(Map<String, Object> map) throws Exception{
+		myCategoryViewDAO.updateCategoryStatus(map);
+	}
+
+	/**
 	 * 카테고리 Parent 저장
 	 * @param map
 	 * @throws Exception

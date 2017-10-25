@@ -49,7 +49,7 @@ public class OrderUtils {
 			if(country_id.equals("113")) {
 				address.append("<br/>").append(map.get(addressType+"address_1"));
 				if(!ObjectUtils.null2void(map.get(addressType+"address_2")).equals("")) {
-					address.append(" ").append(map.get("address_2"));
+					address.append(" ").append(map.get(addressType+"address_2"));
 				}
 				address.append("<br/>").append(map.get(addressType+"postcode"));
 				address.append("<br/>").append(map.get(addressType+"country"));

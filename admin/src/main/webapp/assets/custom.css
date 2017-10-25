@@ -35,3 +35,8 @@
 .portlet>.portlet-title>.actions .btn-icon-only.btn-default {
     padding: 8px 6px 2px;
 }
+.price-old {
+    color: #ffba00;
+    padding-left: 10px;
+    text-decoration: line-through;
+}

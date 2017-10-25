@@ -403,7 +403,7 @@
                                                             <td> ${product.model} </td>
                                                             <td class="text-align-right"> ${product.quantity} </td>
                                                             <td class="text-align-right"> ${ctag:getNumber(product.reward)} </td>
-                                                            <td class="text-align-right"> ${ctag:getCurrency(product.price)} </td>
+                                                            <td class="text-align-right"> ${ctag:getPrice(product.price, product.special)} </td>
                                                             <td class="text-align-right"> ${ctag:getCurrency(product.total)} </td>
                                                         </tr>
                                                     </c:forEach>

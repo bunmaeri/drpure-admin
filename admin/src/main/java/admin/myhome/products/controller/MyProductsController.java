@@ -68,7 +68,7 @@ public class MyProductsController {
 	@RequestMapping(value="/my_products.dr")
     public ModelAndView salesOrder(HttpServletRequest request, Pagemaker pagemaker, CommandMap commandMap) throws Exception {
     	ModelAndView mv = new ModelAndView("/my_products/products");
-    	
+    
     	String array = "";
     	if(null!=BaseController.getCustomSession(request, Session.PRODUCT_IDS)) {
     		commandMap.put("array", BaseController.getCustomSession(request, Session.PRODUCT_IDS));
@@ -144,6 +144,8 @@ public class MyProductsController {
 			mv.addObject("info", info);
 			
 			// 제품이 참조된 제품 목록
+			commandMap.put("language_id", StoreUtils.getLanguageId());
+			commandMap.put("product_id", "%product_id="+product_id+"%");
 			List<Map<String,Object>> products = myProductsService.referenceProducts(commandMap.getMap());
 			mv.addObject("products", products);
 			

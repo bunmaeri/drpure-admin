@@ -39,6 +39,16 @@ Logger log = Logger.getLogger(this.getClass());
 	public void updateCategoryMeta(Map<String, Object> map) throws Exception{
 		categoryViewDAO.updateCategoryMeta(map);
 	}
+
+	/**
+	 * 카테고리 Status 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	@Override
+	public void updateCategoryStatus(Map<String, Object> map) throws Exception{
+		categoryViewDAO.updateCategoryStatus(map);
+	}
 	
 	/**
 	 * 카테고리 Parent 저장

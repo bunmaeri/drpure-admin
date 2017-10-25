@@ -170,10 +170,12 @@ public class ProductsController {
 		String product_id = commandMap.get2String("product_id");
 		if(!product_id.equals("")) {
 			commandMap.put("language_id", StoreUtils.getLanguageIdString());
+			commandMap.put("product_id", "%product_id="+product_id+"%");
 			Map<String,Object> info = productViewService.productInfo(commandMap.getMap());
 			mv.addObject("info", info);
 			
 			// 제품이 참조된 제품 목록
+			commandMap.put("language_id", StoreUtils.getLanguageId());
 			List<Map<String,Object>> products = productsService.referenceProducts(commandMap.getMap());
 			mv.addObject("products", products);
 			

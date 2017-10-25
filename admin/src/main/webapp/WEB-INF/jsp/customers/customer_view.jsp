@@ -128,13 +128,13 @@
 			                                        <div class="form-group">
 			                                            <label class="col-md-3 control-label">비밀번호</label>
 			                                            <div class="col-md-9">
-			                                            	<input type="password" name="password" id="password" class="form-control input-large"/>
+			                                            	<input type="text" name="password" id="password" class="form-control input-large"/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
 			                                            <label class="col-md-3 control-label">마지막 비밀번호</label>
 			                                            <div class="col-md-9">
-			                                            	<input type="text" name="last_password" id="last_password" class="form-control input-large" value="${info.last_password}&nbsp;&nbsp;[${info.login_date}]" readonly/>
+			                                            	<input type="text" name="last_password" id="last_password" class="form-control input-large" value="[${info.last_password}]&nbsp;&nbsp;[${info.login_date}]" readonly/>
 			                                            </div>
 			                                        </div>
 			                                        <div class="form-group">
@@ -219,8 +219,9 @@ $('#button-submit').on('click', function() {
         },
         success: function(json) {
         	$('.custom-alerts').remove();
-            $('.has-error').remove();
-        
+        	$('.has-error').removeClass();
+        	$('.help-block').remove();
+            
             if (json.success) {
                 $('.page-title').after('<div class="custom-alerts alert alert-success fade in"><button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button><i class="fa-lg fa fa-check"></i> ' + json.success + ' </div>');
             }
@@ -240,6 +241,10 @@ $('#button-submit').on('click', function() {
                 if (json.Message.error_telephone) {
                 	$('input[name=\'telephone\']').parent().addClass('has-error');
                     $('input[name=\'telephone\']').after('<span class="help-block"> ' + json.Message.error_telephone + '</span>');
+                }
+                if (json.Message.error_password) {
+                	$('input[name=\'password\']').parent().addClass('has-error');
+                    $('input[name=\'password\']').after('<span class="help-block"> ' + json.Message.error_password + '</span>');
                 }
             }
         },

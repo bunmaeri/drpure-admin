@@ -171,4 +171,38 @@ public class CustomTag {
 		if(reqUrl.equals(clickUrl)) return "active open ";
 		return "";
 	}
+	
+	/**
+	 * 제품 가격 표시(할인)
+	 * @param price
+	 * @param special
+	 * @return
+	 */
+	public static String getPrice(String price, String special) {
+		return getProductPrice(price, special, "product");
+	}
+	
+	/**
+	 * 제품 가격 표시(할인)
+	 * @param price
+	 * @param special
+	 * @return
+	 */
+	public static String getProductPrice(String price, String special, String type) {
+		if(null!=special && !special.equals("") && !special.equals("0") && !special.equals("0.0000") && !special.equals("-1.0000")) {
+			String formated_special = getCurrency(special);
+			String formated_price = getCurrency(price);
+			if(type.equals("product")) {
+				return "<span class='price-new'>"+formated_special+"</span><span class='price-old'>"+formated_price+"</span>";
+			} else
+			if(type.equals("cart")) {
+				return "<span class='price-new'>"+formated_special+"</span><br/><span class='price-old'>"+formated_price+"</span>";
+			} else {
+				return "<span class='price-new'>"+formated_special+"</span><span class='price-old'>"+formated_price+"</span>";
+			}
+			
+		} else {
+			return getCurrency(price);
+		}
+	}
 }

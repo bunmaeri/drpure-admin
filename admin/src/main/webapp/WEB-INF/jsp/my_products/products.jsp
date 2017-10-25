@@ -128,7 +128,7 @@
 		                            		<td class="text-align-left"><a href="/my_product/view/info/${item.product_id}/1.dr" target="_self">${item.name}</a></td>
 		                            		<td class="text-align-center">${item.model}</td>
 		                            		<td class="text-align-center">${item.manufacturer_name}</td>
-		                            		<td class="text-align-right">${ctag:getCurrency(item.price)}</td>
+		                            		<td class="text-align-right">${ctag:getCurrency(item.price)}<c:if test="${item.special>0}"> <span style="color:red">(Sale)</span></c:if></td>
 		                            		<td class="text-align-right">
 		                            		<c:choose>
 		                            		<c:when test="${item.quantity<1}">

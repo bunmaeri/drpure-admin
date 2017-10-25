@@ -37,6 +37,13 @@
         ]]>
     </update>
     
+    <update id="updateCategoryStatus" parameterType="hashmap">
+        UPDATE dr_category 
+           SET status = #{status},
+               date_modified = now()
+         WHERE category_id = #{category_id}
+    </update>
+    
     <update id="updateCategoryParent" parameterType="hashmap">
         <![CDATA[
             UPDATE dr_category

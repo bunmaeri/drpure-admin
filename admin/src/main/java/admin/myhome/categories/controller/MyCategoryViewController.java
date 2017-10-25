@@ -102,12 +102,13 @@ public class MyCategoryViewController {
 
 		Map<String, Object> validMap = new HashMap<String,Object>();
 		this.validFormMeta(validMap, commandMap);
-		
 		if(ObjectUtils.isEmpty(validMap)) {
-			// 기존에 존재하는지 체크
+			// 기존에 존재하는지 체크 
 			Map<String,Object> info = categoryViewService.categoryMeta(commandMap.getMap());
 			if(null!=info && null!=info.get("category_id")) {
 				categoryViewService.updateCategoryMeta(commandMap.getMap()); // 업데이트
+				//System.err.println("==========================="+commandMap.get("status"));
+				categoryViewService.updateCategoryStatus(commandMap.getMap()); // Status 업데이트
 				categoryViewService.updateCategoryParent(commandMap.getMap()); // 카테고리 Parent 저장
 			} else {
 				if(!commandMap.get2String("category_id").equals("0")) {

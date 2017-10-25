@@ -36,6 +36,13 @@
                AND language_id = #{language_id}
         ]]>
     </update>
+  
+    <update id="updateCategoryStatus" parameterType="hashmap">
+        UPDATE my_category 
+           SET status = #{status},
+               date_modified = now()
+         WHERE category_id = #{category_id}
+    </update>
     
     <update id="updateCategoryParent" parameterType="hashmap">
         <![CDATA[

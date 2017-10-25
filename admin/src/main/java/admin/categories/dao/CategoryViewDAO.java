@@ -28,6 +28,15 @@ public class CategoryViewDAO extends AbstractDAO {
 	public void updateCategoryMeta(Map<String, Object> map) throws Exception{
 		update("categoryView.updateCategoryMeta", map);
 	}
+
+	/**
+	 * 카테고리 Status 저장
+	 * @param map
+	 * @throws Exception
+	 */
+	public void updateCategoryStatus(Map<String, Object> map) throws Exception{
+		update("categoryView.updateCategoryStatus", map);
+	}
 	
 	/**
 	 * 카테고리 Parent 저장
