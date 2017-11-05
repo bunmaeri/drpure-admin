@@ -87,8 +87,8 @@
 			                                        <div class="form-group">
 			                                            <label class="control-label">Status</label>
 		                                                <select class="form-control input-large" id="status" name="status">
-				                                            <option value="1" <c:if test="${'1'==category.status}">selected</c:if>>활성</option>
-				                                            <option value="0" <c:if test="${'0'==category.status}">selected</c:if>>비활성</option>
+				                                            <option value="1" <c:if test="${'1'==info.status}">selected</c:if>>활성</option>
+				                                            <option value="0" <c:if test="${'0'==info.status}">selected</c:if>>비활성</option>
 				                                        </select>
 				                                    </div>
 			                                    </div>
