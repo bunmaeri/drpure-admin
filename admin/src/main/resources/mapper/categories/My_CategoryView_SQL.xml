@@ -15,7 +15,7 @@
 		       cd2.meta_description,
 		       cd2.meta_keyword
 		  FROM my_category_path cp LEFT JOIN my_category c1 ON (cp.category_id = c1.category_id)
-		       LEFT JOIN my_category c2 ON (cp.path_id = c2.category_id)
+		       LEFT JOIN my_category c2 ON (cp.category_id = c2.category_id)
 		       LEFT JOIN my_category_description cd1 ON (cp.path_id = cd1.category_id)
 		       LEFT JOIN my_category_description cd2 ON (cp.category_id = cd2.category_id)
 		 WHERE cd1.language_id = #{language_id}

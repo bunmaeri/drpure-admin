@@ -78,10 +78,9 @@
     </select>
     
     <insert id="newProduct" parameterType="hashmap" useGeneratedKeys="true" keyProperty="product_id">
-        INSERT INTO dr_product(model, stock_status_id, shipping, date_available, length, width, height, length_class_id, subtract, sort_order, viewed, date_added, date_modified)
+        INSERT INTO dr_product(model, shipping, date_available, length, width, height, length_class_id, subtract, sort_order, viewed, date_added, date_modified)
         VALUES
             (  #{model},
-               #{stock_status_id},
                #{shipping},
                DATE_FORMAT(now(), '%Y-%m-%d'),
                #{length},
@@ -97,11 +96,12 @@
     </insert>
     
     <insert id="newProductQuantity" parameterType="hashmap">
-        INSERT INTO product_quantity(model, quantity, date_added, date_modified)
+        INSERT INTO product_quantity(model, quantity, stock_status_id, date_added, date_modified)
         VALUES
             (
                 #{model},
                 #{quantity},
+                #{stock_status_id},
                 now(),
                 now()
             )
@@ -109,9 +109,11 @@
     
     <select id="product" parameterType="hashmap" resultType="hashmap">
         SELECT p.*,
-              (SELECT q.quantity FROM product_quantity q WHERE q.model=p.model) AS quantity
-          FROM dr_product p
-         WHERE p.product_id = #{product_id}
+               pq.quantity,
+               pq.stock_status_id
+          FROM dr_product p, product_quantity pq
+         WHERE p.model = pq.model
+           AND p.product_id = #{product_id}
     </select>
     
     <update id="updateProduct" parameterType="hashmap">
@@ -124,7 +126,6 @@
                icebox = #{icebox},
                mpn = #{mpn},
                location = #{location},
-               stock_status_id = #{stock_status_id},
                manufacturer_id = #{manufacturer_id},
                price = #{price},
                tax_class_id = #{tax_class_id},
@@ -142,7 +143,7 @@
     
     <insert id="addProduct" parameterType="hashmap">
         <![CDATA[
-            INSERT INTO dr_product(model, sku, upc, ean, jan, icebox, mpn, location, stock_status_id, manufacturer_id, price, tax_class_id, date_available, weight, weight_class_id, minimum, status, reward_group_id, date_added)
+            INSERT INTO dr_product(model, sku, upc, ean, jan, icebox, mpn, location, manufacturer_id, price, tax_class_id, date_available, weight, weight_class_id, minimum, status, reward_group_id, date_added)
             VALUES
             ( 
                #{model},
@@ -153,7 +154,6 @@
                #{icebox},
                #{mpn},
                #{location},
-               #{stock_status_id},
                #{manufacturer_id},
                #{price},
                #{tax_class_id},
@@ -184,7 +184,7 @@
     
     <update id="updateProductStockStatus" parameterType="hashmap">
         <![CDATA[
-            UPDATE dr_product 
+            UPDATE product_quantity 
                SET stock_status_id = #{stock_status_id}
              WHERE product_id = #{product_id}
         ]]>
@@ -192,11 +192,12 @@
     
     <insert id="addProductQuantity" parameterType="hashmap">
         <![CDATA[
-            INSERT INTO product_quantity(model, product_quantity, date_added, date_modified)
+            INSERT INTO product_quantity(model, product_quantity, stock_status_id, date_added, date_modified)
             VALUES
             ( 
                #{model},
                #{product_quantity},
+               #{stock_status_id},
                now(),
                now()
             )
