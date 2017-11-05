@@ -125,7 +125,9 @@ public class NewsletterController extends BaseController {
 					map = list.get(i);
 					commandMap.put("recipient_name", ObjectUtils.null2void(map.get("email")));
 					commandMap.put("recipient_email", ObjectUtils.null2void(map.get("customer_name")));
-					System.err.println(ObjectUtils.null2void(map.get("email")));
+//					commandMap.put("recipient_name", "Kyungil Jo");
+//					commandMap.put("recipient_email", "bunmaeri@gmail.com");
+					System.err.println(ObjectUtils.null2void(map.get("email"))+" >> "+ObjectUtils.null2void(map.get("customer_name")));
 					MailChimpEmail.run(commandMap.getMap());
 				}
 			}
